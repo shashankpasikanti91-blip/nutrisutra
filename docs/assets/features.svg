@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 320">
+  <defs>
+    <linearGradient id="fbg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d3320;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a5c3a;stop-opacity:1" />
+    </linearGradient>
+    <filter id="fcard">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="320" fill="url(#fbg)" rx="16"/>
+
+  <!-- Feature cards -->
+  <!-- Card 1 -->
+  <g filter="url(#fcard)" transform="translate(40, 30)">
+    <rect x="0" y="0" width="230" height="260" rx="16" fill="#ffffff" opacity="0.07"/>
+    <rect x="0" y="0" width="230" height="260" rx="16" fill="none" stroke="#fff" stroke-width="1" opacity="0.1"/>
+    <text x="115" y="55" text-anchor="middle" font-size="36">🎯</text>
+    <text x="115" y="90" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#ffffff">Deterministic</text>
+    <text x="115" y="110" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#ffffff">Results</text>
+    <line x1="80" y1="125" x2="150" y2="125" stroke="#40c077" stroke-width="2" opacity="0.5"/>
+    <text x="115" y="150" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#a8d5ba">AI detects food names,</text>
+    <text x="115" y="166" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#a8d5ba">fixed engine calculates.</text>
+    <text x="115" y="182" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#a8d5ba">Same input = same result.</text>
+    <text x="115" y="205" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#6ee7a0" font-weight="600">Always reproducible.</text>
+    <!-- Bottom badge -->
+    <rect x="55" y="222" width="120" height="22" rx="11" fill="#40c077" opacity="0.15"/>
+    <text x="115" y="237" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7a0" font-weight="600">Zero guesswork</text>
+  </g>
+
+  <!-- Card 2 -->
+  <g filter="url(#fcard)" transform="translate(300, 30)">
+    <rect x="0" y="0" width="230" height="260" rx="16" fill="#ffffff" opacity="0.07"/>
+    <rect x="0" y="0" width="230" height="260" rx="16" fill="none" stroke="#fff" stroke-width="1" opacity="0.1"/>
+    <text x="115" y="55" text-anchor="middle" font-size="36">🍛</text>
+    <text x="115" y="90" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#ffffff">Indian Food</text>
+    <text x="115" y="110" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#ffffff">First</text>
+    <line x1="80" y1="125" x2="150" y2="125" stroke="#40c077" stroke-width="2" opacity="0.5"/>
+    <text x="115" y="150" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#a8d5ba">60+ items: Idli, Dosa,</text>
+    <text x="115" y="166" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#a8d5ba">Biryani, Sambar, Chapati.</text>
+    <text x="115" y="182" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#a8d5ba">Correct Indian portions.</text>
+    <text x="115" y="205" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#6ee7a0" font-weight="600">Not a Western clone.</text>
+    <rect x="55" y="222" width="120" height="22" rx="11" fill="#40c077" opacity="0.15"/>
+    <text x="115" y="237" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7a0" font-weight="600">Regional cuisine DB</text>
+  </g>
+
+  <!-- Card 3 -->
+  <g filter="url(#fcard)" transform="translate(560, 30)">
+    <rect x="0" y="0" width="230" height="260" rx="16" fill="#ffffff" opacity="0.07"/>
+    <rect x="0" y="0" width="230" height="260" rx="16" fill="none" stroke="#fff" stroke-width="1" opacity="0.1"/>
+    <text x="115" y="55" text-anchor="middle" font-size="36">⚡</text>
+    <text x="115" y="90" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#ffffff">Natural</text>
+    <text x="115" y="110" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#ffffff">Language</text>
+    <line x1="80" y1="125" x2="150" y2="125" stroke="#40c077" stroke-width="2" opacity="0.5"/>
+    <text x="115" y="150" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#a8d5ba">"2 idli with sambar</text>
+    <text x="115" y="166" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#a8d5ba">and chutney" → instant</text>
+    <text x="115" y="182" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#a8d5ba">compound analysis.</text>
+    <text x="115" y="205" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#6ee7a0" font-weight="600">No item-by-item entry.</text>
+    <rect x="55" y="222" width="120" height="22" rx="11" fill="#40c077" opacity="0.15"/>
+    <text x="115" y="237" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7a0" font-weight="600">Type how you talk</text>
+  </g>
+
+  <!-- Card 4 -->
+  <g filter="url(#fcard)" transform="translate(820, 30)">
+    <rect x="0" y="0" width="230" height="260" rx="16" fill="#ffffff" opacity="0.07"/>
+    <rect x="0" y="0" width="230" height="260" rx="16" fill="none" stroke="#fff" stroke-width="1" opacity="0.1"/>
+    <text x="115" y="55" text-anchor="middle" font-size="36">🔒</text>
+    <text x="115" y="90" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#ffffff">Privacy</text>
+    <text x="115" y="110" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#ffffff">First</text>
+    <line x1="80" y1="125" x2="150" y2="125" stroke="#40c077" stroke-width="2" opacity="0.5"/>
+    <text x="115" y="150" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#a8d5ba">No login required. No</text>
+    <text x="115" y="166" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#a8d5ba">images stored. SHA-256</text>
+    <text x="115" y="182" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#a8d5ba">hash only. Offline PWA.</text>
+    <text x="115" y="205" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#6ee7a0" font-weight="600">Your data stays yours.</text>
+    <rect x="55" y="222" width="120" height="22" rx="11" fill="#40c077" opacity="0.15"/>
+    <text x="115" y="237" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7a0" font-weight="600">No cloud. No account.</text>
+  </g>
+</svg>

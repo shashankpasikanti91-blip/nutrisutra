@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  backend:
+    container_name: nutrisutra-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8030:8000"
+    env_file:
+      - .env
+    environment:
+      - CORS_ORIGINS=["https://nutrisutra.srpailabs.com","http://localhost:5173","http://localhost:8080"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s

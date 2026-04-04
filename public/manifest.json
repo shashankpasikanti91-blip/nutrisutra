@@ -1,0 +1,38 @@
+{
+  "name": "NutriSutra",
+  "short_name": "NutriSutra",
+  "description": "AI-powered food decision engine. Snap a photo or type your meal — get instant nutrition verdicts.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f2eb",
+  "theme_color": "#2d6a4f",
+  "categories": ["food", "health", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Analyze Meal",
+      "url": "/analyze",
+      "description": "Quick meal analysis"
+    },
+    {
+      "name": "Daily Tracker",
+      "url": "/demo/tracker",
+      "description": "View daily nutrition tracker"
+    }
+  ]
+}
