@@ -46,7 +46,7 @@ const Navbar = () => {
           {session ? (
             <Link to="/app/dashboard">
               <Button size="sm" variant="outline" className="gap-1.5">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-[10px] font-bold text-white">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-bold text-white">
                   {session.name.charAt(0).toUpperCase()}
                 </span>
                 Dashboard
@@ -58,7 +58,7 @@ const Navbar = () => {
                 <Button variant="ghost" size="sm">Log in</Button>
               </Link>
               <Link to="/signup">
-                <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white">Sign Up Free</Button>
+                <Button size="sm" className="bg-emerald-500 hover:bg-emerald-600 text-white">Sign Up Free</Button>
               </Link>
             </>
           )}
@@ -97,7 +97,7 @@ const Navbar = () => {
                   <Button variant="ghost" className="w-full">Log in</Button>
                 </Link>
                 <Link to="/signup" onClick={() => setOpen(false)}>
-                  <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white">Sign Up Free</Button>
+                  <Button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white">Sign Up Free</Button>
                 </Link>
               </>
             )}

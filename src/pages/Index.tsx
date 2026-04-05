@@ -13,11 +13,11 @@ const stagger = { visible: { transition: { staggerChildren: 0.1 } } };
 
 const popularFoods = [
   { name: "Biryani", emoji: "🍛", cal: "350 kcal", tag: "Hyderabadi" },
-  { name: "Masala Dosa", emoji: "🥞", cal: "210 kcal", tag: "South Indian" },
+  { name: "Masala Dosa", emoji: "�", cal: "210 kcal", tag: "South Indian" },
   { name: "Butter Chicken", emoji: "🍗", cal: "240 kcal", tag: "North Indian" },
-  { name: "Idli Sambar", emoji: "🫓", cal: "95 kcal", tag: "Breakfast" },
-  { name: "Chole Bhature", emoji: "🫘", cal: "450 kcal", tag: "Punjabi" },
-  { name: "Pav Bhaji", emoji: "🍞", cal: "320 kcal", tag: "Street Food" },
+  { name: "Idli Sambar", emoji: "🍚", cal: "95 kcal", tag: "Breakfast" },
+  { name: "Chole Bhature", emoji: "🍛", cal: "450 kcal", tag: "Punjabi" },
+  { name: "Pav Bhaji", emoji: "🍲", cal: "320 kcal", tag: "Street Food" },
 ];
 
 const categories = [
@@ -30,9 +30,9 @@ const categories = [
 ];
 
 const features = [
-  { icon: Camera, title: "Snap & Analyze", desc: "Point your camera at any meal — AI identifies it and shows full nutrition instantly", gradient: "from-orange-400 to-rose-500" },
+  { icon: Camera, title: "Snap & Analyze", desc: "Point your camera at any meal — AI identifies it and shows full nutrition instantly", gradient: "from-emerald-400 to-teal-500" },
   { icon: ScanBarcode, title: "Barcode Scanner", desc: "Scan packaged food barcodes — pulls nutrition from 3M+ products worldwide", gradient: "from-violet-500 to-purple-600" },
-  { icon: Search, title: "170+ Indian Foods", desc: "Biryani, dosa, paneer tikka, vada pav — we know desi food better than anyone", gradient: "from-amber-400 to-orange-500" },
+  { icon: Search, title: "170+ Indian Foods", desc: "Biryani, dosa, paneer tikka, vada pav — we know desi food better than anyone", gradient: "from-green-400 to-emerald-500" },
   { icon: BarChart3, title: "Full Macro Breakdown", desc: "Protein, carbs, fat, fiber, sugar, sodium — complete picture at a glance", gradient: "from-sky-400 to-blue-500" },
   { icon: Zap, title: "Smart Portions", desc: "Real serving sizes — 1 idli = 40g, 1 roti = 35g, not random guesses", gradient: "from-emerald-400 to-teal-500" },
   { icon: Heart, title: "Health Condition Alerts", desc: "Diabetes, high BP, low BP — get personalized warnings and safer food suggestions", gradient: "from-rose-400 to-red-500" },
@@ -52,22 +52,22 @@ const Index = () => (
 
     {/* ─── Hero ─── */}
     <section className="relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-orange-50 via-amber-50/50 to-background dark:from-orange-950/20 dark:via-background dark:to-background" />
-      <div className="absolute top-20 -right-20 h-72 w-72 rounded-full bg-orange-200/30 blur-3xl dark:bg-orange-900/10" />
-      <div className="absolute -bottom-10 -left-20 h-60 w-60 rounded-full bg-amber-200/30 blur-3xl dark:bg-amber-900/10" />
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-green-50/50 to-background dark:from-emerald-950/20 dark:via-background dark:to-background" />
+      <div className="absolute top-20 -right-20 h-72 w-72 rounded-full bg-emerald-200/30 blur-3xl dark:bg-emerald-900/10" />
+      <div className="absolute -bottom-10 -left-20 h-60 w-60 rounded-full bg-green-200/30 blur-3xl dark:bg-green-900/10" />
 
       <div className="relative container max-w-5xl px-4 pt-16 pb-12">
         <motion.div initial="hidden" animate="visible" variants={stagger} className="flex flex-col items-center text-center lg:flex-row lg:text-left lg:gap-12">
 
           {/* Left content */}
           <div className="flex-1">
-            <motion.div variants={fadeUp} className="inline-flex items-center gap-2 rounded-full bg-orange-100 dark:bg-orange-900/30 px-4 py-1.5 text-xs font-semibold text-orange-700 dark:text-orange-300 mb-6">
+            <motion.div variants={fadeUp} className="inline-flex items-center gap-2 rounded-full bg-emerald-100 dark:bg-emerald-900/30 px-4 py-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300 mb-6">
               <Utensils className="h-3.5 w-3.5" /> Made for Indian Food Lovers
             </motion.div>
 
             <motion.h1 variants={fadeUp} className="text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl">
               Know what's on{" "}
-              <span className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 bg-clip-text text-transparent">
                 your plate
               </span>
             </motion.h1>
@@ -78,7 +78,7 @@ const Index = () => (
 
             <motion.div variants={fadeUp} className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
               <Link to="/signup">
-                <Button className="w-full sm:w-auto h-14 px-8 text-base font-bold rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-lg shadow-orange-500/25">
+                <Button className="w-full sm:w-auto h-14 px-8 text-base font-bold rounded-2xl bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white shadow-lg shadow-emerald-500/25">
                   <Camera className="h-5 w-5 mr-2" />
                   Start Free — 30 Days
                 </Button>
@@ -101,16 +101,16 @@ const Index = () => (
           <motion.div variants={fadeUp} className="mt-10 lg:mt-0 flex-shrink-0 w-full max-w-sm">
             <div className="rounded-3xl border border-border bg-card p-5 shadow-card-lg">
               <div className="flex items-center gap-2 mb-4">
-                <div className="h-2.5 w-2.5 rounded-full bg-orange-400" />
+                <div className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
                 <span className="text-sm font-bold text-foreground">Popular in India</span>
               </div>
               <div className="grid grid-cols-2 gap-2.5">
                 {popularFoods.map((food) => (
-                  <div key={food.name} className="rounded-2xl bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/20 p-3 transition-transform hover:scale-[1.03]">
+                  <div key={food.name} className="rounded-2xl bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/20 p-3 transition-transform hover:scale-[1.03]">
                     <span className="text-2xl">{food.emoji}</span>
                     <p className="mt-1.5 text-xs font-bold text-foreground leading-tight">{food.name}</p>
                     <p className="text-[10px] text-muted-foreground">{food.cal}</p>
-                    <span className="mt-1 inline-block rounded-full bg-orange-100 dark:bg-orange-900/40 px-2 py-0.5 text-[9px] font-semibold text-orange-600 dark:text-orange-300">{food.tag}</span>
+                    <span className="mt-1 inline-block rounded-full bg-emerald-100 dark:bg-emerald-900/40 px-2 py-0.5 text-[9px] font-semibold text-emerald-600 dark:text-emerald-300">{food.tag}</span>
                   </div>
                 ))}
               </div>
@@ -125,7 +125,7 @@ const Index = () => (
       <div className="container max-w-5xl">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
           <motion.h2 variants={fadeUp} className="text-2xl font-extrabold text-foreground text-center">
-            We know <span className="text-orange-500">your food</span>
+            We know <span className="text-emerald-500">your food</span>
           </motion.h2>
           <motion.p variants={fadeUp} className="mt-2 text-sm text-muted-foreground text-center">
             From filter coffee to gulab jamun — 170+ dishes and growing
@@ -180,7 +180,7 @@ const Index = () => (
     </section>
 
     {/* ─── Features ─── */}
-    <section className="py-16 px-4 bg-gradient-to-b from-background to-orange-50/30 dark:to-orange-950/5">
+    <section className="py-16 px-4 bg-gradient-to-b from-background to-emerald-50/30 dark:to-emerald-950/5">
       <div className="container max-w-5xl">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
           <motion.h2 variants={fadeUp} className="text-2xl font-extrabold text-foreground text-center">
@@ -215,7 +215,7 @@ const Index = () => (
               { step: "03", icon: "⌨️", title: "Type It", desc: "Search by name — biryani, dosa, pizza — and get accurate per-serving data" },
             ].map((s) => (
               <div key={s.step} className="relative rounded-2xl border border-border bg-card p-5 text-center">
-                <span className="absolute -top-3 left-4 rounded-full bg-orange-500 px-2.5 py-0.5 text-[10px] font-bold text-white">{s.step}</span>
+                <span className="absolute -top-3 left-4 rounded-full bg-emerald-500 px-2.5 py-0.5 text-[10px] font-bold text-white">{s.step}</span>
                 <span className="text-3xl">{s.icon}</span>
                 <h3 className="mt-3 text-sm font-bold text-foreground">{s.title}</h3>
                 <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{s.desc}</p>
@@ -270,13 +270,13 @@ const Index = () => (
     {/* ─── Bottom CTA ─── */}
     <section className="px-4 pb-12">
       <div className="container max-w-lg">
-        <div className="rounded-3xl bg-gradient-to-br from-orange-500 via-amber-500 to-yellow-500 p-8 text-center">
+        <div className="rounded-3xl bg-gradient-to-br from-emerald-500 via-green-500 to-teal-500 p-8 text-center">
           <h2 className="text-2xl font-extrabold text-white">Ready to eat smarter?</h2>
           <p className="mt-2 text-sm text-white/80">
             Free for 30 days. Track every meal. Know every calorie.
           </p>
           <Link to="/signup">
-            <Button className="mt-6 h-12 bg-white text-orange-600 font-bold rounded-2xl px-8 hover:bg-white/90 shadow-lg">
+            <Button className="mt-6 h-12 bg-white text-emerald-600 font-bold rounded-2xl px-8 hover:bg-white/90 shadow-lg">
               Sign Up Free <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           </Link>

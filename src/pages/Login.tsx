@@ -44,6 +44,11 @@ const Login = () => {
                 {error}
               </div>
             )}
+
+            {/* Demo credentials hint */}
+            <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 px-4 py-3 text-sm text-emerald-700 dark:text-emerald-300">
+              <strong>Demo Login:</strong> demo@nutrisutra.com / demo1234
+            </div>
             <div>
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1" required />

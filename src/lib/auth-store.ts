@@ -48,6 +48,40 @@ function saveUsers(users: Record<string, UserProfile>) {
 }
 
 // ───────────────────────────────────────
+// Demo account auto-seed
+// ───────────────────────────────────────
+
+const DEMO_EMAIL = "demo@nutrisutra.com";
+const DEMO_PASSWORD = "demo1234";
+const DEMO_NAME = "Demo User";
+
+/** Pre-computed SHA-256 of "demo1234" + salt — avoids async in init */
+const DEMO_HASH = ""; // Will be computed on first access
+
+async function ensureDemoAccount(): Promise<void> {
+  const users = getUsers();
+  const exists = Object.values(users).find((u) => u.email === DEMO_EMAIL);
+  if (exists) return;
+
+  const hash = await hashPassword(DEMO_PASSWORD);
+  const now = Date.now();
+  const id = "user_demo_account";
+  const user: UserProfile = {
+    id,
+    name: DEMO_NAME,
+    email: DEMO_EMAIL,
+    passwordHash: hash,
+    createdAt: now,
+    trialEndsAt: now + 365 * 24 * 60 * 60 * 1000, // 1 year
+  };
+  users[id] = user;
+  saveUsers(users);
+}
+
+// Seed demo account on module load
+ensureDemoAccount();
+
+// ───────────────────────────────────────
 // Registration
 // ───────────────────────────────────────
 
