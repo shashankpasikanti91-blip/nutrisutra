@@ -1517,14 +1517,6 @@ export const FOOD_DATABASE: Record<string, FoodEntry> = {
   // ═══════════════════════════════════════
   // EXPANDED: INDIAN SNACKS & STREET FOOD
   // ═══════════════════════════════════════
-  SAMOSA: {
-    code: "SAMOSA", name: "Samosa", aliases: ["samosa", "samosas", "aloo samosa"],
-    cuisine: "North Indian", category: "Snack", isVeg: true,
-    calories: 260, protein: 5, carbs: 28, fat: 14, fiber: 2, sugar: 2, sodium: 350,
-    defaultServingG: 80, defaultServingLabel: "1 samosa",
-    servingOptions: [{ label: "1 samosa (80g)", grams: 80 }, { label: "2 samosas (160g)", grams: 160 }],
-    tags: ["fried", "street-food"],
-  },
   PAKORA: {
     code: "PAKORA", name: "Pakora", aliases: ["pakora", "pakoda", "bhajji", "bajji", "bhajiya", "onion pakora"],
     cuisine: "Indian", category: "Snack", isVeg: true,
