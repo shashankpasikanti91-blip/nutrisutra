@@ -121,14 +121,14 @@ const WaterTracker = () => {
           transition={{ delay: 0.3 }}
         >
           {progress >= 100 ? (
-            <p className="text-sm font-medium text-primary">🎉 You've reached your daily water goal! Great job!</p>
+            <p className="text-sm font-medium text-primary">You've reached your daily water goal! Great job!</p>
           ) : progress >= 50 ? (
             <p className="text-sm font-medium text-muted-foreground">
-              💧 You're halfway there! {target - glasses} more glasses to go.
+              You're halfway there! {target - glasses} more glasses to go.
             </p>
           ) : (
             <p className="text-sm font-medium text-muted-foreground">
-              💧 Stay hydrated! {target - glasses} glasses remaining today.
+              Stay hydrated! {target - glasses} glasses remaining today.
             </p>
           )}
         </motion.div>

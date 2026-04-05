@@ -9,21 +9,21 @@ const fadeUp = {
 };
 
 const CUISINE_FLAGS: Record<string, string> = {
-  "South Indian": "🇮🇳",
-  "Indian": "🇮🇳",
-  "Andhra": "🇮🇳",
-  "Telangana": "🇮🇳",
-  "North Indian": "🇮🇳",
-  "Malaysian": "🇲🇾",
-  "Chinese": "🇨🇳",
-  "Singaporean": "🇸🇬",
-  "Western": "🌍",
-  "Italian": "🇮🇹",
-  "American": "🇺🇸",
-  "Japanese": "🇯🇵",
-  "Thai": "🇹🇭",
-  "Korean": "🇰🇷",
-  "Mexican": "🇲🇽",
+  "South Indian": "IN",
+  "Indian": "IN",
+  "Andhra": "IN",
+  "Telangana": "IN",
+  "North Indian": "IN",
+  "Malaysian": "MY",
+  "Chinese": "CN",
+  "Singaporean": "SG",
+  "Western": "GL",
+  "Italian": "IT",
+  "American": "US",
+  "Japanese": "JP",
+  "Thai": "TH",
+  "Korean": "KR",
+  "Mexican": "MX",
 };
 
 const VERDICT_STYLES = {
@@ -35,7 +35,7 @@ const VERDICT_STYLES = {
     textColor: "text-emerald-700 dark:text-emerald-400",
     pillBg: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
     label: "Good for your goal",
-    emoji: "🟢",
+    dot: "bg-emerald-500",
   },
   moderate: {
     bg: "bg-amber-500",
@@ -45,7 +45,7 @@ const VERDICT_STYLES = {
     textColor: "text-amber-700 dark:text-amber-400",
     pillBg: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
     label: "Okay in moderation",
-    emoji: "🟡",
+    dot: "bg-amber-500",
   },
   avoid: {
     bg: "bg-red-500",
@@ -55,7 +55,7 @@ const VERDICT_STYLES = {
     textColor: "text-red-700 dark:text-red-400",
     pillBg: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
     label: "Not ideal for your goal",
-    emoji: "🔴",
+    dot: "bg-red-500",
   },
 };
 
@@ -81,7 +81,8 @@ export function DecisionCard({ decision }: DecisionCardProps) {
           </div>
           <div className="flex-1 min-w-0">
             <p className={`text-sm font-semibold ${style.textColor}`}>
-              {style.emoji} {style.label}
+              <span className={`inline-block h-2.5 w-2.5 rounded-full ${style.dot} mr-1.5 align-middle`} />
+              {style.label}
             </p>
             <p className="text-xs text-muted-foreground mt-0.5">
               {decision.headline}
@@ -161,9 +162,9 @@ export function DecisionCard({ decision }: DecisionCardProps) {
                 danger: "bg-red-50 border-red-200 dark:bg-red-950/30 dark:border-red-800",
               };
               const conditionLabels: Record<string, string> = {
-                diabetes: "🩸 Diabetes",
-                high_bp: "📈 High BP",
-                low_bp: "📉 Low BP",
+                diabetes: "Diabetes",
+                high_bp: "High BP",
+                low_bp: "Low BP",
               };
               return (
                 <div key={i} className={`rounded-xl border p-3 ${severityStyles[alert.severity]}`}>
@@ -172,7 +173,7 @@ export function DecisionCard({ decision }: DecisionCardProps) {
                     <span className="text-[11px] font-bold">{conditionLabels[alert.condition] ?? alert.condition}</span>
                   </div>
                   <p className="mt-1 text-xs text-foreground leading-relaxed">{alert.message}</p>
-                  <p className="mt-1 text-[11px] text-muted-foreground leading-relaxed">💡 {alert.suggestion}</p>
+                  <p className="mt-1 text-[11px] text-muted-foreground leading-relaxed">{alert.suggestion}</p>
                 </div>
               );
             })}
@@ -186,7 +187,7 @@ export function DecisionCard({ decision }: DecisionCardProps) {
           <div className="flex items-start gap-2.5 rounded-xl border border-indigo-200 bg-indigo-50 dark:border-indigo-800 dark:bg-indigo-950/30 p-3">
             <Moon className="mt-0.5 h-4 w-4 shrink-0 text-indigo-500" />
             <div>
-              <p className="text-xs font-bold text-indigo-700 dark:text-indigo-400">🌙 Night Meal Advisory</p>
+              <p className="text-xs font-bold text-indigo-700 dark:text-indigo-400">Night Meal Advisory</p>
               <p className="mt-1 text-xs text-foreground leading-relaxed">{decision.nightMealWarning}</p>
             </div>
           </div>

@@ -1,21 +1,22 @@
 import { motion } from "framer-motion";
+import { Flame, Dumbbell, Scale, type LucideIcon } from "lucide-react";
 import type { UserGoal } from "@/types";
 
-const GOALS: { value: UserGoal; label: string; emoji: string; description: string; activeBg: string; activeBorder: string; activeText: string }[] = [
+const GOALS: { value: UserGoal; label: string; Icon: LucideIcon; description: string; activeBg: string; activeBorder: string; activeText: string }[] = [
   {
-    value: "lose", label: "Lose Weight", emoji: "🔥", description: "Calorie deficit",
+    value: "lose", label: "Lose Weight", Icon: Flame, description: "Calorie deficit",
     activeBg: "bg-emerald-50 dark:bg-emerald-950/40",
     activeBorder: "border-emerald-500",
     activeText: "text-emerald-700 dark:text-emerald-400",
   },
   {
-    value: "gain", label: "Gain Weight", emoji: "💪", description: "Calorie surplus",
+    value: "gain", label: "Gain Weight", Icon: Dumbbell, description: "Calorie surplus",
     activeBg: "bg-amber-50 dark:bg-amber-950/40",
     activeBorder: "border-amber-500",
     activeText: "text-amber-700 dark:text-amber-400",
   },
   {
-    value: "maintain", label: "Maintain", emoji: "⚖️", description: "Stay balanced",
+    value: "maintain", label: "Maintain", Icon: Scale, description: "Stay balanced",
     activeBg: "bg-blue-50 dark:bg-blue-950/40",
     activeBorder: "border-blue-500",
     activeText: "text-blue-700 dark:text-blue-400",
@@ -43,7 +44,7 @@ export function GoalSelector({ selected, onChange }: GoalSelectorProps) {
                 : "border-transparent bg-muted/60 hover:bg-muted"
             }`}
           >
-            <span className="text-xl" role="img" aria-label={goal.label}>{goal.emoji}</span>
+            <goal.Icon className={`h-5 w-5 ${active ? goal.activeText : "text-muted-foreground"}`} />
             <div className="text-left">
               <span className={`block text-xs font-semibold leading-tight ${active ? goal.activeText : "text-foreground"}`}>
                 {goal.label}

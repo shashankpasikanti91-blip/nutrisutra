@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Sparkles, ArrowRight, X, Camera, Type, Loader2, ImageOff, Zap, ChevronDown, ScanBarcode } from "lucide-react";
+import { Search, Sparkles, ArrowRight, X, Camera, Type, Loader2, ImageOff, Zap, ChevronDown, ScanBarcode, Flame, Dumbbell, Scale, Droplet, TrendingUp, TrendingDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import Navbar from "@/components/Navbar";
 import { parseInput } from "@/lib/parser";
@@ -46,12 +46,12 @@ const EXAMPLES = [
 ];
 
 const QUICK_PICKS = [
-  { label: "Idli + Sambar", emoji: "🫓" },
-  { label: "Masala Dosa", emoji: "🥞" },
-  { label: "Chicken Biryani", emoji: "🍗" },
-  { label: "Coffee", emoji: "☕" },
-  { label: "Rice + Dal", emoji: "🍚" },
-  { label: "Burger + Fries", emoji: "🍔" },
+  "Idli + Sambar",
+  "Masala Dosa",
+  "Chicken Biryani",
+  "Coffee",
+  "Rice + Dal",
+  "Burger + Fries",
 ];
 
 const Analyze = () => {
@@ -59,6 +59,11 @@ const Analyze = () => {
   const [goal, setGoal] = useState<UserGoal>(() => {
     return (localStorage.getItem("nutrisutra_goal") as UserGoal) || "maintain";
   });
+
+  // ── Shared state ──
+  const [mode, setMode] = useState<AnalyzeSource | "barcode">("text");
+  const [result, setResult] = useState<AnalysisResult | null>(null);
+  const [decision, setDecision] = useState<MealDecision | null>(null);
 
   // ── Health conditions state ──
   const [healthConditions, setHealthConditions] = useState<HealthCondition[]>(() => {
@@ -75,11 +80,6 @@ const Analyze = () => {
       return next;
     });
   }, [result, goal]);
-
-  // ── Shared state ──
-  const [mode, setMode] = useState<AnalyzeSource | "barcode">("text");
-  const [result, setResult] = useState<AnalysisResult | null>(null);
-  const [decision, setDecision] = useState<MealDecision | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
 
@@ -341,7 +341,7 @@ const Analyze = () => {
                     : "bg-muted text-muted-foreground"
                 }`}
               >
-                {g === "lose" ? "🔥 Lose" : g === "gain" ? "💪 Gain" : "⚖️ Keep"}
+                {g === "lose" ? <><Flame className="inline h-3 w-3 mr-0.5" /> Lose</> : g === "gain" ? <><Dumbbell className="inline h-3 w-3 mr-0.5" /> Gain</> : <><Scale className="inline h-3 w-3 mr-0.5" /> Keep</>}
               </button>
             ))}
           </div>
@@ -355,19 +355,20 @@ const Analyze = () => {
         >
           <span className="text-[10px] text-muted-foreground font-medium">Health:</span>
           {([
-            { value: "diabetes" as HealthCondition, label: "🩸 Diabetes" },
-            { value: "high_bp" as HealthCondition, label: "📈 High BP" },
-            { value: "low_bp" as HealthCondition, label: "📉 Low BP" },
+            { value: "diabetes" as HealthCondition, label: "Diabetes", Icon: Droplet },
+            { value: "high_bp" as HealthCondition, label: "High BP", Icon: TrendingUp },
+            { value: "low_bp" as HealthCondition, label: "Low BP", Icon: TrendingDown },
           ]).map((c) => (
             <button
               key={c.value}
               onClick={() => handleHealthToggle(c.value)}
-              className={`rounded-full px-2.5 py-1 text-[10px] font-semibold transition-all ${
+              className={`rounded-full px-2.5 py-1 text-[10px] font-semibold transition-all inline-flex items-center gap-1 ${
                 healthConditions.includes(c.value)
                   ? "bg-rose-500 text-white"
                   : "bg-muted text-muted-foreground"
               }`}
             >
+              <c.Icon className="inline h-3 w-3" />
               {c.label}
             </button>
           ))}
@@ -449,11 +450,11 @@ const Analyze = () => {
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {QUICK_PICKS.map((pick) => (
                     <button
-                      key={pick.label}
-                      onClick={() => handleAnalyze(pick.label)}
+                      key={pick}
+                      onClick={() => handleAnalyze(pick)}
                       className="rounded-full bg-primary/8 border border-primary/15 px-3 py-1.5 text-xs font-medium text-primary transition hover:bg-primary/15"
                     >
-                      {pick.emoji} {pick.label}
+                      {pick}
                     </button>
                   ))}
                 </div>

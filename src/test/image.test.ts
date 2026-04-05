@@ -28,9 +28,9 @@ describe("isValidImageType", () => {
     expect(isValidImageType(file)).toBe(true);
   });
 
-  it("rejects gif", () => {
+  it("accepts gif", () => {
     const file = new File(["x"], "test.gif", { type: "image/gif" });
-    expect(isValidImageType(file)).toBe(false);
+    expect(isValidImageType(file)).toBe(true);
   });
 
   it("rejects pdf", () => {

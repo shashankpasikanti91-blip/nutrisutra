@@ -43,9 +43,9 @@ NutriSutra is a **mobile-first nutrition analysis PWA** built for Indian, Asian,
 
 <table>
 <tr>
-<td align="center"><strong>📸 Snap & Scan</strong><br/><sub>Live camera or gallery upload<br/>AI-powered food detection</sub></td>
-<td align="center"><strong>🎯 Smart Verdicts</strong><br/><sub>Goal-based eat/skip decisions<br/>Per-component breakdown</sub></td>
-<td align="center"><strong>📊 Daily Tracker</strong><br/><sub>Meals, macros & water<br/>No login required</sub></td>
+<td align="center"><strong>Snap & Scan</strong><br/><sub>Live camera or gallery upload<br/>AI-powered food detection</sub></td>
+<td align="center"><strong>Smart Verdicts</strong><br/><sub>Goal-based eat/skip decisions<br/>Per-component breakdown</sub></td>
+<td align="center"><strong>Daily Tracker</strong><br/><sub>Meals, macros & water<br/>No login required</sub></td>
 </tr>
 </table>
 
@@ -67,15 +67,15 @@ NutriSutra is a **mobile-first nutrition analysis PWA** built for Indian, Asian,
 
 | Feature | Description |
 |:--------|:------------|
-| 🗣️ **Natural Language Input** | Type `"chicken biryani half plate"` or `"coffee with 8 soaked almonds"` — compound meals parsed in one go |
-| 📸 **Snap & Scan** | Live camera capture + gallery upload → AI detects food → deterministic engine calculates |
-| 🎯 **Goal-Based Verdicts** | Real-time 🟢 Good / 🟡 Moderate / 🔴 Avoid decisions based on Lose / Gain / Maintain goals |
-| 🍛 **Indian Food First** | 60+ items: Idli, Dosa, Biryani, Sambar, Chapati, Dal, Filter Coffee, Pongal, and more |
-| 🧮 **Cooking Style Modifiers** | `fried`, `steamed`, `ghee`, `oily`, `homemade`, `restaurant` — each adjusts calories & fat with fixed multipliers |
-| 📊 **Daily Tracker** | Breakfast / Lunch / Dinner / Snacks slots with real-time totals and progress ring |
-| 💧 **Water Tracker** | Animated ring, glasses counter, weight-based daily goal |
-| 🔒 **Privacy First** | No login required. No images stored. SHA-256 hash only. Fully offline PWA. |
-| 📱 **Installable PWA** | Add to home screen. Standalone app experience. Works offline. |
+| **Natural Language Input** | Type `"chicken biryani half plate"` or `"coffee with 8 soaked almonds"` — compound meals parsed in one go |
+| **Snap & Scan** | Live camera capture + gallery upload — AI detects food — deterministic engine calculates |
+| **Goal-Based Verdicts** | Real-time Good / Moderate / Avoid decisions based on Lose / Gain / Maintain goals |
+| **510+ Indian Foods** | Regional coverage: South Indian, North Indian, Maharashtrian, Bengali, Gujarati, Rajasthani, Odia, and more |
+| **Cooking Style Modifiers** | `fried`, `steamed`, `ghee`, `oily`, `homemade`, `restaurant` — each adjusts calories & fat with fixed multipliers |
+| **Daily Tracker** | Breakfast / Lunch / Dinner / Snacks slots with real-time totals and progress ring |
+| **Water Tracker** | Animated ring, glasses counter, weight-based daily goal |
+| **Privacy First** | No login required. No images stored. SHA-256 hash only. Fully offline PWA. |
+| **Installable PWA** | Add to home screen. Standalone app experience. Works offline. |
 
 ### Modifier System
 
@@ -161,7 +161,8 @@ nutrisutra/
 │   ├── lib/
 │   │   ├── parser/               # Natural language food parser
 │   │   ├── calculations/         # Compound calculation engine
-│   │   ├── food-database.ts      # 60+ food items (per 100g)
+│   │   ├── food-database.ts      # 168 food items (per 100g nutrition)
+│   │   ├── food-catalog.ts       # 510 regional Indian food catalog
 │   │   ├── nutrition-engine.ts   # Deterministic calorie engine
 │   │   ├── decision-engine.ts    # Goal-based verdict system
 │   │   ├── api/                  # OpenRouter image API client
@@ -196,7 +197,7 @@ nutrisutra/
                      │
    ┌─────────────────▼─────────────────┐
    │  FOOD DATABASE LOOKUP              │
-   │  60+ items with per-100g macros    │
+   │  510+ items with per-100g macros    │
    │  Fuzzy matching + aliases          │
    └─────────────────┬─────────────────┘
                      │
@@ -227,7 +228,7 @@ nutrisutra/
 | | **NutriSutra** | **Cal AI** | **MyFitnessPal** | **HealthifyMe** |
 |:---|:---:|:---:|:---:|:---:|
 | **Deterministic results** | ✅ | ❌ | ❌ | ❌ |
-| **Indian food database** | ✅ 60+ items | ⚠️ Limited | ⚠️ Limited | ✅ |
+| **Indian food database** | 510+ items | Limited | Limited | Yes |
 | **Cooking style modifiers** | ✅ 15 types | ❌ | ❌ | ❌ |
 | **Natural language input** | ✅ Compound | ❌ | ⚠️ Basic | ⚠️ Basic |
 | **Goal-based verdicts** | ✅ Real-time | ❌ | ❌ | ⚠️ Basic |
@@ -236,8 +237,8 @@ nutrisutra/
 | **Offline capable** | ✅ PWA | ❌ | ❌ | ❌ |
 | **Free** | ✅ | ❌ $9/mo | Freemium | Freemium |
 | **Transparency** | ✅ Per-item | ❌ Black box | ❌ | ❌ |
-| Barcode scanning | ❌ | ✅ | ✅ | ✅ |
-| Large food database | 60+ | 800K+ | 14M+ | 500K+ |
+| Barcode scanning | Yes | Yes | Yes | Yes |
+| Large food database | 510+ | 800K+ | 14M+ | 500K+ |
 | Wearable integration | ❌ | ❌ | ✅ | ✅ |
 
 > **Our niche**: Accuracy + transparency for Indian and Asian cuisine — an underserved market that Western apps handle poorly.
@@ -248,12 +249,12 @@ nutrisutra/
 
 | What you type | What NutriSutra sees |
 |:---|:---|
-| `white coffee with no sugar` | ☕ Milk Coffee · No Sugar modifier |
-| `2 idli with sambar and chutney` | 🫓 2× Idli + 🥘 Sambar + 🥣 Chutney |
-| `coffee with 8 soaked almonds and 10 sunflower seeds` | ☕ Coffee + 🥜 8× Almonds (soaked) + 🌻 10× Sunflower Seeds |
-| `chicken biryani half plate` | 🍗 Chicken Biryani · Half Plate portion |
-| `fried dosa with ghee` | 🥞 Dosa · Fried (1.3× cal) + Ghee (1.3× cal, 1.6× fat) |
-| `homemade dal with 3 chapati` | 🥘 Dal (homemade 0.9×) + 🫓 3× Chapati |
+| `white coffee with no sugar` | Milk Coffee with No Sugar modifier |
+| `2 idli with sambar and chutney` | 2x Idli + Sambar + Chutney |
+| `coffee with 8 soaked almonds and 10 sunflower seeds` | Coffee + 8x Almonds (soaked) + 10x Sunflower Seeds |
+| `chicken biryani half plate` | Chicken Biryani with Half Plate portion |
+| `fried dosa with ghee` | Dosa — Fried (1.3x cal) + Ghee (1.3x cal, 1.6x fat) |
+| `homemade dal with 3 chapati` | Dal (homemade 0.9x) + 3x Chapati |
 
 <br/>
 

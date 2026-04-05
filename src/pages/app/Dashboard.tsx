@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Camera, Plus, Flame, Drumstick, Wheat, Droplets, TrendingUp, Award, Target } from "lucide-react";
+import { Search, Camera, Plus, Flame, Drumstick, Wheat, Droplets, TrendingUp, Award, Target, ClipboardList, Settings2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { getDailyLog, getDayTotals, getStreaks } from "@/lib/demo-store";
 import { getSession } from "@/lib/auth-store";
@@ -42,7 +42,7 @@ const Dashboard = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">
-              {new Date().getHours() < 12 ? "Good morning" : new Date().getHours() < 17 ? "Good afternoon" : "Good evening"}, {userName}! 👋
+              {new Date().getHours() < 12 ? "Good morning" : new Date().getHours() < 17 ? "Good afternoon" : "Good evening"}, {userName}!
             </h1>
             <p className="text-sm text-muted-foreground">Track your meals and reach your goals</p>
           </div>
@@ -161,9 +161,9 @@ const Dashboard = () => {
 
         {/* Bottom nav */}
         <div className="mt-8 flex justify-center gap-4">
-          <Link to="/app/history"><Button variant="outline" size="sm">📋 History</Button></Link>
+          <Link to="/app/history"><Button variant="outline" size="sm"><ClipboardList className="mr-1 h-4 w-4" /> History</Button></Link>
           <Link to="/app/insights"><Button variant="outline" size="sm"><TrendingUp className="mr-1 h-4 w-4" /> Insights</Button></Link>
-          <Link to="/app/settings"><Button variant="outline" size="sm">⚙️ Settings</Button></Link>
+          <Link to="/app/settings"><Button variant="outline" size="sm"><Settings2 className="mr-1 h-4 w-4" /> Settings</Button></Link>
         </div>
       </div>
     </div>

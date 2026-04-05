@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, LogOut } from "lucide-react";
+import { ArrowLeft, LogOut, Droplet, TrendingUp, TrendingDown, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,10 +9,10 @@ import { getSession, getTrialDaysLeft, logout } from "@/lib/auth-store";
 import { getHealthProfile, saveHealthProfile } from "@/lib/demo-store";
 import type { HealthCondition } from "@/types";
 
-const HEALTH_CONDITIONS: { value: HealthCondition; label: string; emoji: string; desc: string }[] = [
-  { value: "diabetes", label: "Diabetes", emoji: "🩸", desc: "Get alerts for high sugar & carbs" },
-  { value: "high_bp", label: "High BP", emoji: "📈", desc: "Get alerts for high sodium & fat" },
-  { value: "low_bp", label: "Low BP", emoji: "📉", desc: "Get reminders to eat regular meals" },
+const HEALTH_CONDITIONS: { value: HealthCondition; label: string; Icon: LucideIcon; desc: string }[] = [
+  { value: "diabetes", label: "Diabetes", Icon: Droplet, desc: "Get alerts for high sugar & carbs" },
+  { value: "high_bp", label: "High BP", Icon: TrendingUp, desc: "Get alerts for high sodium & fat" },
+  { value: "low_bp", label: "Low BP", Icon: TrendingDown, desc: "Get reminders to eat regular meals" },
 ];
 
 const Settings = () => {
@@ -113,7 +113,7 @@ const Settings = () => {
                     : "border-border hover:border-rose-200"
                 }`}
               >
-                <span className="text-2xl">{hc.emoji}</span>
+                <hc.Icon className="h-6 w-6 text-rose-500" />
                 <div className="flex-1">
                   <span className={`text-sm font-semibold ${active ? "text-rose-700 dark:text-rose-400" : "text-foreground"}`}>{hc.label}</span>
                   <span className="block text-[11px] text-muted-foreground">{hc.desc}</span>

@@ -40,10 +40,10 @@ const Pricing = () => {
             {/* Region toggle */}
             <motion.div variants={fadeUp} className="mt-8 inline-flex rounded-lg border border-border bg-muted p-1">
               <button onClick={() => setRegion("india")} className={`rounded-md px-5 py-2 text-sm font-semibold transition-all ${region === "india" ? "bg-card text-foreground shadow-card" : "text-muted-foreground"}`}>
-                🇮🇳 India
+                India
               </button>
               <button onClick={() => setRegion("global")} className={`rounded-md px-5 py-2 text-sm font-semibold transition-all ${region === "global" ? "bg-card text-foreground shadow-card" : "text-muted-foreground"}`}>
-                🌍 Global
+                Global
               </button>
             </motion.div>
           </motion.div>

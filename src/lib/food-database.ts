@@ -8,6 +8,14 @@ export interface FoodEntry {
   cuisine: string;
   category: string;
   isVeg: boolean;
+  /** Region grouping: "South Indian", "North Indian", "East Indian", "West Indian", "Pan India" */
+  region?: string;
+  /** State/sub-region: "Tamil Nadu", "Andhra/Telangana", "Kerala", "Karnataka", "Punjabi/North", etc. */
+  state?: string;
+  /** Primary category from seed: "Breakfast","Main Course","Street Food", etc. */
+  primaryCategory?: string;
+  /** Typical meal time */
+  typicalMeal?: string;
   // Nutrition per 100g
   calories: number;
   protein: number;

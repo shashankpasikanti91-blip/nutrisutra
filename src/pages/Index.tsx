@@ -3,36 +3,56 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
   Camera, Search, BarChart3, Zap, Utensils, Flame, ScanBarcode, Heart,
-  ChevronDown, ArrowRight, Star, Shield, Smartphone,
+  ChevronDown, ArrowRight, Star, Shield, Smartphone, Calculator, Droplets,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import {
+  BiryaniIcon, DosaIcon, CurryIcon, ChickenIcon, ThaliIcon, StreetFoodIcon,
+  BreakfastIcon, SamosaIcon, SweetIcon, FishIcon, IdliIcon,
+  DiabetesIcon, BPHighIcon, BPLowIcon, NightIcon,
+} from "@/components/FoodIcons";
+import { getRegionalCategoryCounts, getFunctionalCategoryCounts, getTotalFoodCount } from "@/lib/food-catalog";
 
 const fadeUp = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } };
 const stagger = { visible: { transition: { staggerChildren: 0.1 } } };
 
 const popularFoods = [
-  { name: "Biryani", emoji: "🍛", cal: "350 kcal", tag: "Hyderabadi" },
-  { name: "Masala Dosa", emoji: "�", cal: "210 kcal", tag: "South Indian" },
-  { name: "Butter Chicken", emoji: "🍗", cal: "240 kcal", tag: "North Indian" },
-  { name: "Idli Sambar", emoji: "🍚", cal: "95 kcal", tag: "Breakfast" },
-  { name: "Chole Bhature", emoji: "🍛", cal: "450 kcal", tag: "Punjabi" },
-  { name: "Pav Bhaji", emoji: "🍲", cal: "320 kcal", tag: "Street Food" },
+  { name: "Biryani", Icon: BiryaniIcon, cal: "350 kcal", tag: "Hyderabadi" },
+  { name: "Masala Dosa", Icon: DosaIcon, cal: "210 kcal", tag: "South Indian" },
+  { name: "Butter Chicken", Icon: ChickenIcon, cal: "240 kcal", tag: "North Indian" },
+  { name: "Idli Sambar", Icon: IdliIcon, cal: "95 kcal", tag: "Breakfast" },
+  { name: "Chole Bhature", Icon: CurryIcon, cal: "450 kcal", tag: "Punjabi" },
+  { name: "Pav Bhaji", Icon: StreetFoodIcon, cal: "320 kcal", tag: "Street Food" },
 ];
 
-const categories = [
-  { label: "South Indian", emoji: "🥥", count: "35+" },
-  { label: "North Indian", emoji: "🍛", count: "40+" },
-  { label: "Street Food", emoji: "🍡", count: "20+" },
-  { label: "Healthy", emoji: "🥗", count: "25+" },
-  { label: "Desserts", emoji: "🍮", count: "15+" },
-  { label: "Fast Food", emoji: "🍔", count: "20+" },
-];
+// Regional categories computed from actual food catalog (510+ items)
+const regionalCategories = getRegionalCategoryCounts();
+const functionalCategories = getFunctionalCategoryCounts();
+const totalFoods = getTotalFoodCount();
+
+// Map category keys to icons
+const categoryIconMap: Record<string, React.FC<{ className?: string; size?: number }>> = {
+  "Andhra/Telangana": BiryaniIcon,
+  "Tamil Nadu": DosaIcon,
+  "South India": ThaliIcon,
+  "Punjabi/North": CurryIcon,
+  "Rajasthan": SamosaIcon,
+  "Maharashtra": StreetFoodIcon,
+  "Gujarat": SweetIcon,
+  "West Bengal": FishIcon,
+  "Odisha": ThaliIcon,
+  "Bihar/Jharkhand": CurryIcon,
+  "Assam": FishIcon,
+  "Breakfast": BreakfastIcon,
+  "Main Course": ThaliIcon,
+  "Street Food": StreetFoodIcon,
+};
 
 const features = [
   { icon: Camera, title: "Snap & Analyze", desc: "Point your camera at any meal — AI identifies it and shows full nutrition instantly", gradient: "from-emerald-400 to-teal-500" },
   { icon: ScanBarcode, title: "Barcode Scanner", desc: "Scan packaged food barcodes — pulls nutrition from 3M+ products worldwide", gradient: "from-violet-500 to-purple-600" },
-  { icon: Search, title: "170+ Indian Foods", desc: "Biryani, dosa, paneer tikka, vada pav — we know desi food better than anyone", gradient: "from-green-400 to-emerald-500" },
+  { icon: Search, title: `${totalFoods}+ Indian Foods`, desc: "Biryani, dosa, paneer tikka, vada pav — we know desi food better than anyone", gradient: "from-green-400 to-emerald-500" },
   { icon: BarChart3, title: "Full Macro Breakdown", desc: "Protein, carbs, fat, fiber, sugar, sodium — complete picture at a glance", gradient: "from-sky-400 to-blue-500" },
   { icon: Zap, title: "Smart Portions", desc: "Real serving sizes — 1 idli = 40g, 1 roti = 35g, not random guesses", gradient: "from-emerald-400 to-teal-500" },
   { icon: Heart, title: "Health Condition Alerts", desc: "Diabetes, high BP, low BP — get personalized warnings and safer food suggestions", gradient: "from-rose-400 to-red-500" },
@@ -43,7 +63,7 @@ const faqs = [
   { q: "How accurate are the calorie estimates?", a: "NutriSutra uses a deterministic engine — same input always gives the same result. We show confidence levels, never fake exact numbers." },
   { q: "Does it support homemade vs restaurant food?", a: "Yes. Select cooking style with one tap and we adjust calories with realistic multipliers." },
   { q: "Is it free to use?", a: "Sign up free and get full access for 30 days — no credit card needed. After that, upgrade to Pro starting ₹199/month." },
-  { q: "What foods does it support?", a: "170+ Indian dishes (South Indian, North Indian, street food, sweets), plus global foods, restaurant chains, fruits, and more — growing every week." },
+  { q: "What foods does it support?", a: `${totalFoods}+ Indian dishes across Andhra, Tamil Nadu, Kerala, Karnataka, Punjab, Bengal, Maharashtra, Gujarat, Rajasthan, and more — plus global foods, restaurant chains, fruits — growing every week.` },
 ];
 
 const Index = () => (
@@ -73,7 +93,7 @@ const Index = () => (
             </motion.h1>
 
             <motion.p variants={fadeUp} className="mt-5 text-lg text-muted-foreground max-w-lg mx-auto lg:mx-0">
-              Snap a photo, scan a barcode, or just type — get instant calories & macro breakdown for <strong>170+ Indian dishes</strong> and global foods.
+              Snap a photo, scan a barcode, or just type — get instant calories & macro breakdown for <strong>{totalFoods}+ Indian dishes</strong> and global foods.
             </motion.p>
 
             <motion.div variants={fadeUp} className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
@@ -107,7 +127,7 @@ const Index = () => (
               <div className="grid grid-cols-2 gap-2.5">
                 {popularFoods.map((food) => (
                   <div key={food.name} className="rounded-2xl bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/20 p-3 transition-transform hover:scale-[1.03]">
-                    <span className="text-2xl">{food.emoji}</span>
+                    <food.Icon className="text-emerald-600 dark:text-emerald-400" size={28} />
                     <p className="mt-1.5 text-xs font-bold text-foreground leading-tight">{food.name}</p>
                     <p className="text-[10px] text-muted-foreground">{food.cal}</p>
                     <span className="mt-1 inline-block rounded-full bg-emerald-100 dark:bg-emerald-900/40 px-2 py-0.5 text-[9px] font-semibold text-emerald-600 dark:text-emerald-300">{food.tag}</span>
@@ -120,7 +140,7 @@ const Index = () => (
       </div>
     </section>
 
-    {/* ─── Food Categories ─── */}
+    {/* ─── Regional Food Categories ─── */}
     <section className="py-12 px-4 border-t border-border/50">
       <div className="container max-w-5xl">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
@@ -128,16 +148,47 @@ const Index = () => (
             We know <span className="text-emerald-500">your food</span>
           </motion.h2>
           <motion.p variants={fadeUp} className="mt-2 text-sm text-muted-foreground text-center">
-            From filter coffee to gulab jamun — 170+ dishes and growing
+            {totalFoods}+ dishes across every major Indian region — and growing
           </motion.p>
-          <motion.div variants={fadeUp} className="mt-8 grid grid-cols-3 gap-3 sm:grid-cols-6">
-            {categories.map((cat) => (
-              <div key={cat.label} className="flex flex-col items-center gap-2 rounded-2xl border border-border bg-card p-4 transition hover:shadow-md hover:-translate-y-0.5">
-                <span className="text-3xl">{cat.emoji}</span>
-                <span className="text-xs font-bold text-foreground">{cat.label}</span>
-                <span className="text-[10px] text-muted-foreground">{cat.count} items</span>
-              </div>
-            ))}
+
+          {/* Regional categories */}
+          <motion.h3 variants={fadeUp} className="mt-8 text-sm font-semibold text-muted-foreground uppercase tracking-wider text-center">
+            By Region
+          </motion.h3>
+          <motion.div variants={fadeUp} className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            {regionalCategories.map((cat) => {
+              const IconComponent = categoryIconMap[cat.key] || ThaliIcon;
+              return (
+                <div key={cat.key} className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-4 transition hover:shadow-md hover:-translate-y-0.5">
+                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${cat.color} text-white`}>
+                    <IconComponent size={20} />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-sm font-bold text-foreground block truncate">{cat.label}</span>
+                    <span className="text-xs text-muted-foreground">{cat.count} items</span>
+                  </div>
+                </div>
+              );
+            })}
+          </motion.div>
+
+          {/* Functional categories */}
+          <motion.h3 variants={fadeUp} className="mt-8 text-sm font-semibold text-muted-foreground uppercase tracking-wider text-center">
+            By Type
+          </motion.h3>
+          <motion.div variants={fadeUp} className="mt-4 grid grid-cols-3 gap-3">
+            {functionalCategories.map((cat) => {
+              const IconComponent = categoryIconMap[cat.key] || ThaliIcon;
+              return (
+                <div key={cat.key} className="group flex flex-col items-center gap-2 rounded-2xl border border-border bg-card p-4 transition hover:shadow-md hover:-translate-y-0.5">
+                  <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${cat.color} text-white`}>
+                    <IconComponent size={20} />
+                  </div>
+                  <span className="text-xs font-bold text-foreground text-center">{cat.label}</span>
+                  <span className="text-[10px] text-muted-foreground">{cat.count} items</span>
+                </div>
+              );
+            })}
           </motion.div>
         </motion.div>
       </div>
@@ -155,19 +206,19 @@ const Index = () => (
           </motion.p>
           <motion.div variants={fadeUp} className="mt-8 grid gap-3 sm:grid-cols-3">
             {[
-              { emoji: "🩸", title: "Diabetes", desc: "Flags high sugar & carbs. Suggests low-GI alternatives like brown rice, millets, oats.", color: "border-rose-200 bg-rose-50 dark:border-rose-900 dark:bg-rose-950/30" },
-              { emoji: "📈", title: "High Blood Pressure", desc: "Warns about excess sodium & saturated fat. Suggests skipping papad, pickle, extra salt.", color: "border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950/30" },
-              { emoji: "📉", title: "Low Blood Pressure", desc: "Alerts on too-light meals. Reminds to eat regularly and stay hydrated.", color: "border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950/30" },
+              { Icon: DiabetesIcon, title: "Diabetes", desc: "Flags high sugar & carbs. Suggests low-GI alternatives like brown rice, millets, oats.", color: "border-rose-200 bg-rose-50 dark:border-rose-900 dark:bg-rose-950/30", iconColor: "text-rose-500" },
+              { Icon: BPHighIcon, title: "High Blood Pressure", desc: "Warns about excess sodium & saturated fat. Suggests skipping papad, pickle, extra salt.", color: "border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950/30", iconColor: "text-amber-500" },
+              { Icon: BPLowIcon, title: "Low Blood Pressure", desc: "Alerts on too-light meals. Reminds to eat regularly and stay hydrated.", color: "border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950/30", iconColor: "text-blue-500" },
             ].map((h) => (
               <div key={h.title} className={`rounded-2xl border p-5 ${h.color}`}>
-                <span className="text-3xl">{h.emoji}</span>
+                <h.Icon className={h.iconColor} size={32} />
                 <h3 className="mt-2 text-sm font-bold text-foreground">{h.title}</h3>
                 <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{h.desc}</p>
               </div>
             ))}
           </motion.div>
           <motion.div variants={fadeUp} className="mt-6 rounded-2xl border border-indigo-200 bg-indigo-50 dark:border-indigo-800 dark:bg-indigo-950/30 p-4 flex items-start gap-3">
-            <span className="text-2xl">🌙</span>
+            <NightIcon className="text-indigo-500 shrink-0" size={28} />
             <div>
               <h3 className="text-sm font-bold text-foreground">Night Meal Alerts</h3>
               <p className="mt-0.5 text-xs text-muted-foreground leading-relaxed">
@@ -210,13 +261,15 @@ const Index = () => (
           </motion.h2>
           <motion.div variants={fadeUp} className="mt-10 grid gap-4 sm:grid-cols-3">
             {[
-              { step: "01", icon: "📸", title: "Snap a Photo", desc: "Take a photo of your meal — AI detects the food and shows full nutrition" },
-              { step: "02", icon: "📱", title: "Scan Barcode", desc: "Scan any packaged food barcode — instant nutrition from 3M+ products" },
-              { step: "03", icon: "⌨️", title: "Type It", desc: "Search by name — biryani, dosa, pizza — and get accurate per-serving data" },
+              { step: "01", Icon: Camera, title: "Snap a Photo", desc: "Take a photo of your meal — AI detects the food and shows full nutrition" },
+              { step: "02", Icon: ScanBarcode, title: "Scan Barcode", desc: "Scan any packaged food barcode — instant nutrition from 3M+ products" },
+              { step: "03", Icon: Search, title: "Type It", desc: "Search by name — biryani, dosa, pizza — and get accurate per-serving data" },
             ].map((s) => (
               <div key={s.step} className="relative rounded-2xl border border-border bg-card p-5 text-center">
                 <span className="absolute -top-3 left-4 rounded-full bg-emerald-500 px-2.5 py-0.5 text-[10px] font-bold text-white">{s.step}</span>
-                <span className="text-3xl">{s.icon}</span>
+                <div className="flex justify-center">
+                  <s.Icon className="h-8 w-8 text-emerald-500" />
+                </div>
                 <h3 className="mt-3 text-sm font-bold text-foreground">{s.title}</h3>
                 <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{s.desc}</p>
               </div>
@@ -232,16 +285,16 @@ const Index = () => (
         <h2 className="text-lg font-bold text-foreground mb-4">Quick Tools</h2>
         <div className="grid grid-cols-3 gap-2">
           {[
-            { emoji: "📸", label: "Analyze", link: "/analyze" },
-            { emoji: "🧮", label: "Calculator", link: "/demo/calculator" },
-            { emoji: "💧", label: "Water", link: "/demo/water" },
+            { Icon: Camera, label: "Analyze", link: "/analyze" },
+            { Icon: Calculator, label: "Calculator", link: "/demo/calculator" },
+            { Icon: Droplets, label: "Water", link: "/demo/water" },
           ].map((tool) => (
             <Link
               key={tool.label}
               to={tool.link}
               className="flex flex-col items-center gap-2 rounded-2xl border border-border bg-card p-4 text-center transition hover:shadow-md hover:-translate-y-0.5"
             >
-              <span className="text-2xl">{tool.emoji}</span>
+              <tool.Icon className="h-6 w-6 text-emerald-500" />
               <span className="text-xs font-semibold text-foreground">{tool.label}</span>
             </Link>
           ))}

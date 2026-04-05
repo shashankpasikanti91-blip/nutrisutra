@@ -63,7 +63,7 @@ const DailyIntakeCalculator = () => {
                       : "border-border text-muted-foreground hover:border-primary/40"
                   }`}
                 >
-                  {g === "male" ? "👨 Male" : "👩 Female"}
+                  {g === "male" ? "Male" : "Female"}
                 </button>
               ))}
             </div>

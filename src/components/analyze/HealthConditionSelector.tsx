@@ -1,15 +1,16 @@
 import { motion } from "framer-motion";
+import { Droplet, TrendingUp, TrendingDown, type LucideIcon } from "lucide-react";
 import type { HealthCondition } from "@/types";
 
 const CONDITIONS: {
   value: HealthCondition;
   label: string;
-  emoji: string;
+  Icon: LucideIcon;
   description: string;
 }[] = [
-  { value: "diabetes", label: "Diabetes", emoji: "🩸", description: "Sugar control" },
-  { value: "high_bp", label: "High BP", emoji: "📈", description: "Low sodium" },
-  { value: "low_bp", label: "Low BP", emoji: "📉", description: "Regular meals" },
+  { value: "diabetes", label: "Diabetes", Icon: Droplet, description: "Sugar control" },
+  { value: "high_bp", label: "High BP", Icon: TrendingUp, description: "Low sodium" },
+  { value: "low_bp", label: "Low BP", Icon: TrendingDown, description: "Regular meals" },
 ];
 
 interface HealthConditionSelectorProps {
@@ -43,7 +44,7 @@ export function HealthConditionSelector({ selected, onChange }: HealthConditionS
                   : "border-transparent bg-muted/60 hover:bg-muted"
               }`}
             >
-              <span className="text-lg">{c.emoji}</span>
+              <c.Icon className={`h-5 w-5 ${active ? "text-rose-500" : "text-muted-foreground"}`} />
               <div>
                 <span className={`block text-xs font-semibold leading-tight ${active ? "text-rose-700 dark:text-rose-400" : "text-foreground"}`}>
                   {c.label}

@@ -14,11 +14,11 @@ import {
   type MealSlot, type DailyLog,
 } from "@/lib/demo-store";
 
-const SLOT_META: Record<MealSlot, { label: string; icon: typeof Sun; emoji: string }> = {
-  breakfast: { label: "Breakfast", icon: Coffee, emoji: "🌅" },
-  lunch: { label: "Lunch", icon: Sun, emoji: "☀️" },
-  dinner: { label: "Dinner", icon: Moon, emoji: "🌙" },
-  snacks: { label: "Snacks", icon: Cookie, emoji: "🍪" },
+const SLOT_META: Record<MealSlot, { label: string; icon: typeof Sun }> = {
+  breakfast: { label: "Breakfast", icon: Coffee },
+  lunch: { label: "Lunch", icon: Sun },
+  dinner: { label: "Dinner", icon: Moon },
+  snacks: { label: "Snacks", icon: Cookie },
 };
 
 const fadeUp = { initial: { opacity: 0, y: 12 }, animate: { opacity: 1, y: 0 } };
@@ -127,7 +127,7 @@ const DemoTracker = () => {
               <motion.div key={slot} {...fadeUp} transition={{ delay: 0.25 }}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-lg">{meta.emoji}</span>
+                    <meta.icon className="h-5 w-5 text-primary" />
                     <h3 className="font-bold text-foreground">{meta.label}</h3>
                     {slotData.count > 0 && (
                       <span className="text-xs text-muted-foreground">{slotData.calories} kcal</span>
