@@ -13,6 +13,19 @@ export interface UserProfile {
   trialEndsAt: number; // timestamp
 }
 
+/** Extended profile data saved per user */
+export interface UserProfileData {
+  name: string;
+  email: string;
+  age: number;
+  heightCm: number;
+  weightKg: number;
+  goal: "weight_loss" | "muscle_gain" | "maintenance" | "diabetic_friendly";
+  diet: "non_veg" | "vegetarian" | "vegan" | "eggetarian";
+  cuisine: "south_indian" | "north_indian" | "malaysian" | "chinese" | "western" | "mixed";
+  units: "metric" | "imperial";
+}
+
 export interface AuthSession {
   userId: string;
   email: string;
@@ -127,6 +140,9 @@ export async function registerUser(
   users[id] = user;
   saveUsers(users);
 
+  // Initialize user profile with defaults
+  initializeUserProfile(id, trimmedName, trimmedEmail);
+
   const session: AuthSession = {
     userId: id,
     email: user.email,
@@ -211,4 +227,68 @@ export function isTrialExpired(): boolean {
 
 export function isTrialActive(): boolean {
   return isLoggedIn() && !isTrialExpired();
+}
+
+// ───────────────────────────────────────
+// User-scoped localStorage key
+// ───────────────────────────────────────
+
+/** Returns a localStorage key scoped to the current user.
+ *  Falls back to global key if no user is logged in. */
+export function userKey(baseKey: string): string {
+  const session = getSession();
+  if (session) return `${baseKey}_${session.userId}`;
+  return baseKey;
+}
+
+// ───────────────────────────────────────
+// User profile data (per-user)
+// ───────────────────────────────────────
+
+const PROFILE_KEY = "nutrisutra_profile";
+
+export function getDefaultProfileData(name: string, email: string): UserProfileData {
+  return {
+    name,
+    email,
+    age: 25,
+    heightCm: 170,
+    weightKg: 70,
+    goal: "maintenance",
+    diet: "non_veg",
+    cuisine: "south_indian",
+    units: "metric",
+  };
+}
+
+export function getUserProfileData(): UserProfileData {
+  try {
+    const raw = localStorage.getItem(userKey(PROFILE_KEY));
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  const session = getSession();
+  return getDefaultProfileData(session?.name || "User", session?.email || "");
+}
+
+export function saveUserProfileData(data: UserProfileData): void {
+  localStorage.setItem(userKey(PROFILE_KEY), JSON.stringify(data));
+  // Also update the session name if it changed
+  const session = getSession();
+  if (session && data.name !== session.name) {
+    session.name = data.name;
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    // Also update in users store
+    const users = getUsers();
+    if (users[session.userId]) {
+      users[session.userId].name = data.name;
+      saveUsers(users);
+    }
+  }
+}
+
+/** Called on registration to initialize the user's profile with defaults */
+export function initializeUserProfile(userId: string, name: string, email: string): void {
+  const key = `${PROFILE_KEY}_${userId}`;
+  const defaults = getDefaultProfileData(name, email);
+  localStorage.setItem(key, JSON.stringify(defaults));
 }

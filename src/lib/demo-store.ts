@@ -5,6 +5,7 @@
 
 import { type NutritionResult } from "./nutrition-engine";
 import type { HealthCondition, HealthProfile } from "@/types";
+import { userKey } from "./auth-store";
 
 export type MealSlot = "breakfast" | "lunch" | "dinner" | "snacks";
 
@@ -50,6 +51,9 @@ const GOALS_KEY = "nutrisutra_demo_goals";
 const HISTORY_KEY = "nutrisutra_history";
 const HEALTH_KEY = "nutrisutra_health_profile";
 
+/** Get a user-scoped storage key */
+function sKey(base: string): string { return userKey(base); }
+
 function getTodayKey(): string {
   return new Date().toISOString().split("T")[0];
 }
@@ -59,14 +63,14 @@ function getTodayKey(): string {
 // ───────────────────────────────────────
 export function getHealthProfile(): HealthProfile {
   try {
-    const raw = localStorage.getItem(HEALTH_KEY);
+    const raw = localStorage.getItem(sKey(HEALTH_KEY));
     if (raw) return JSON.parse(raw);
   } catch {}
   return { conditions: [] };
 }
 
 export function saveHealthProfile(profile: HealthProfile) {
-  localStorage.setItem(HEALTH_KEY, JSON.stringify(profile));
+  localStorage.setItem(sKey(HEALTH_KEY), JSON.stringify(profile));
 }
 
 export function toggleHealthCondition(condition: HealthCondition): HealthProfile {
@@ -86,14 +90,14 @@ export function toggleHealthCondition(condition: HealthCondition): HealthProfile
 // ───────────────────────────────────────
 function getHistory(): Record<string, DailyLog> {
   try {
-    const raw = localStorage.getItem(HISTORY_KEY);
+    const raw = localStorage.getItem(sKey(HISTORY_KEY));
     if (raw) return JSON.parse(raw);
   } catch {}
   return {};
 }
 
 function saveHistory(history: Record<string, DailyLog>) {
-  localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+  localStorage.setItem(sKey(HISTORY_KEY), JSON.stringify(history));
 }
 
 /** Archive a day's log into history (called automatically on day change) */
@@ -106,7 +110,7 @@ function archiveDay(log: DailyLog) {
 
 export function getDailyLog(): DailyLog {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(sKey(STORAGE_KEY));
     if (raw) {
       const log: DailyLog = JSON.parse(raw);
       if (log.date === getTodayKey()) return log;
@@ -119,7 +123,7 @@ export function getDailyLog(): DailyLog {
 }
 
 export function saveDailyLog(log: DailyLog) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(log));
+  localStorage.setItem(sKey(STORAGE_KEY), JSON.stringify(log));
   // Also mirror into history for today (keeps history always in sync)
   const history = getHistory();
   history[log.date] = log;
@@ -168,13 +172,13 @@ export function updateGoals(calorieGoal: number, waterGoal: number) {
   log.calorieGoal = calorieGoal;
   log.waterGoal = waterGoal;
   saveDailyLog(log);
-  localStorage.setItem(GOALS_KEY, JSON.stringify({ calorieGoal, waterGoal }));
+  localStorage.setItem(sKey(GOALS_KEY), JSON.stringify({ calorieGoal, waterGoal }));
   return log;
 }
 
 export function getSavedGoals(): { calorieGoal: number; waterGoal: number } {
   try {
-    const raw = localStorage.getItem(GOALS_KEY);
+    const raw = localStorage.getItem(sKey(GOALS_KEY));
     if (raw) return JSON.parse(raw);
   } catch {}
   return { calorieGoal: 2000, waterGoal: 8 };

@@ -20,6 +20,7 @@ import { getCachedImageResult, setCachedImageResult, clearExpiredImageCache } fr
 import { analyzeImageApi } from "@/lib/api/analyze-image";
 import { BarcodeScanner, type BarcodeNutrition } from "@/components/analyze/BarcodeScanner";
 import { getHealthProfile, saveHealthProfile } from "@/lib/demo-store";
+import { userKey } from "@/lib/auth-store";
 import type { AnalysisResult, AnalyzeSource, ImageAnalysisStatus, UserGoal, MealDecision, HealthCondition } from "@/types";
 
 const fadeUp = {
@@ -57,7 +58,7 @@ const QUICK_PICKS = [
 const Analyze = () => {
   // ── Goal state ──
   const [goal, setGoal] = useState<UserGoal>(() => {
-    return (localStorage.getItem("nutrisutra_goal") as UserGoal) || "maintain";
+    return (localStorage.getItem(userKey("nutrisutra_goal")) as UserGoal) || "maintain";
   });
 
   // ── Shared state ──
@@ -101,7 +102,7 @@ const Analyze = () => {
   // Persist goal and recompute decision when goal changes
   const handleGoalChange = useCallback((newGoal: UserGoal) => {
     setGoal(newGoal);
-    localStorage.setItem("nutrisutra_goal", newGoal);
+    localStorage.setItem(userKey("nutrisutra_goal"), newGoal);
     if (result) {
       setDecision(computeDecision(result, newGoal, { healthConditions }));
     }
