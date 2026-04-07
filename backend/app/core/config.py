@@ -30,6 +30,12 @@ class Settings(BaseSettings):
         "http://localhost:8080",
     ]
 
+    # Admin & notifications
+    TELEGRAM_BOT_TOKEN: str = ""
+    TELEGRAM_CHAT_ID: str = ""
+    ADMIN_EMAIL: str = "pasikantishashank24@gmail.com"
+    ADMIN_API_KEY: str = "ns_admin_shashank_2026_srpai"
+
     @property
     def max_image_bytes(self) -> int:
         return self.MAX_IMAGE_UPLOAD_MB * 1024 * 1024
@@ -38,6 +44,10 @@ class Settings(BaseSettings):
     def is_openrouter_ready(self) -> bool:
         """True only when both the flag is on AND an API key is present."""
         return bool(self.ENABLE_OPENROUTER_IMAGE_ANALYSIS and self.OPENROUTER_API_KEY)
+
+    @property
+    def is_telegram_ready(self) -> bool:
+        return bool(self.TELEGRAM_BOT_TOKEN and self.TELEGRAM_CHAT_ID)
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
 

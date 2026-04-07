@@ -6,6 +6,7 @@ import { Search, Camera, Plus, Flame, Drumstick, Wheat, Droplets, TrendingUp, Aw
 import Navbar from "@/components/Navbar";
 import { getDailyLog, getDayTotals, getStreaks } from "@/lib/demo-store";
 import { getSession } from "@/lib/auth-store";
+import { AIDietGuide } from "@/components/analyze/AIDietGuide";
 
 const quickChips = ["Idli", "Dosa", "Biryani", "Burger", "Pizza", "Nasi Lemak", "Fried Rice", "Salad"];
 const cuisineFilters = ["All", "Indian", "Malaysian", "Chinese", "Western", "Fast Food"];
@@ -158,6 +159,15 @@ const Dashboard = () => {
             )}
           </div>
         </div>
+
+        {/* AI Dietary Guide */}
+        <AIDietGuide
+          caloriesConsumed={dailyCal}
+          calorieGoal={goalCal}
+          proteinConsumed={totals.protein}
+          carbsConsumed={totals.carbs}
+          fatConsumed={totals.fat}
+        />
 
         {/* Bottom nav */}
         <div className="mt-8 flex justify-center gap-4">

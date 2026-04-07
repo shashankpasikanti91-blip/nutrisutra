@@ -12,6 +12,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.analyze_image import router as analyze_image_router
+from app.api.admin import router as admin_router
 from app.core.config import settings
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s  %(name)s  %(message)s")
@@ -33,6 +34,7 @@ app.add_middleware(
 
 # ── Routers ──
 app.include_router(analyze_image_router, tags=["Image Analysis"])
+app.include_router(admin_router, tags=["Admin"])
 
 
 # ── Health ──

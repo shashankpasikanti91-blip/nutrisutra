@@ -18,6 +18,7 @@ import FoodResult from "./pages/app/FoodResult.tsx";
 import History from "./pages/app/History.tsx";
 import Insights from "./pages/app/Insights.tsx";
 import Settings from "./pages/app/Settings.tsx";
+import AdminDashboard from "./pages/app/Admin.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { InstallPrompt } from "@/components/common/InstallPrompt";
 import { ProtectedRoute } from "@/components/common/ProtectedRoute";
@@ -49,6 +50,7 @@ const App = () => (
           <Route path="/app/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
           <Route path="/app/insights" element={<ProtectedRoute><Insights /></ProtectedRoute>} />
           <Route path="/app/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+          <Route path="/app/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import Navbar from "@/components/Navbar";
 import logoIcon from "@/assets/logo-icon.png";
 import { registerUser } from "@/lib/auth-store";
+import { reportSignup } from "@/lib/api/events";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -22,6 +23,7 @@ const Signup = () => {
     const result = await registerUser(name, email, password);
     setLoading(false);
     if (result.success) {
+      reportSignup(name, email);
       navigate("/app/dashboard");
     } else {
       setError(result.error);

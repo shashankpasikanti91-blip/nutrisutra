@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
+import { Check, MessageCircle, Mail, AlertCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -23,10 +23,25 @@ const plans = {
 
 const Pricing = () => {
   const [region, setRegion] = useState<"india" | "global">("india");
+  const location = useLocation();
+  const trialExpired = (location.state as { trialExpired?: boolean } | null)?.trialExpired;
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
+
+      {/* Trial expired alert */}
+      {trialExpired && (
+        <div className="bg-destructive/10 border-b border-destructive/20 px-4 py-4">
+          <div className="container flex items-center gap-3">
+            <AlertCircle className="h-5 w-5 text-destructive shrink-0" />
+            <p className="text-sm text-destructive font-medium">
+              Your 30-day free trial has ended. Choose a plan below to continue using NutriSutra.
+            </p>
+          </div>
+        </div>
+      )}
+
       <section className="py-20">
         <div className="container">
           <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.1 } } }} className="text-center">

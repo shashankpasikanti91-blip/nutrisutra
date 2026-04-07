@@ -38,6 +38,8 @@ const USERS_KEY = "nutrisutra_users";
 const SESSION_KEY = "nutrisutra_session";
 const TRIAL_DAYS = 30;
 
+const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL || "pasikantishashank24@gmail.com";
+
 // Simple hash — NOT cryptographically secure, but fine for client-side MVP.
 // In production, use a real backend with bcrypt.
 async function hashPassword(password: string): Promise<string> {
@@ -61,15 +63,51 @@ function saveUsers(users: Record<string, UserProfile>) {
 }
 
 // ───────────────────────────────────────
+// Admin / Owner helpers
+// ───────────────────────────────────────
+
+export function isAdmin(): boolean {
+  const session = getSession();
+  if (!session) return false;
+  return session.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+}
+
+// ───────────────────────────────────────
+// Owner account auto-seed
+// ───────────────────────────────────────
+
+const OWNER_EMAIL = "pasikantishashank24@gmail.com";
+const OWNER_NAME = "Shashank";
+const OWNER_PASSWORD = "NutriAdmin@2026";
+
+async function ensureOwnerAccount(): Promise<void> {
+  const users = getUsers();
+  const exists = Object.values(users).find((u) => u.email === OWNER_EMAIL);
+  if (exists) return;
+
+  const hash = await hashPassword(OWNER_PASSWORD);
+  const now = Date.now();
+  const id = "user_owner_shashank";
+  const user: UserProfile = {
+    id,
+    name: OWNER_NAME,
+    email: OWNER_EMAIL,
+    passwordHash: hash,
+    createdAt: now,
+    trialEndsAt: now + 10 * 365 * 24 * 60 * 60 * 1000, // never expires (10 years)
+  };
+  users[id] = user;
+  saveUsers(users);
+  initializeUserProfile(id, OWNER_NAME, OWNER_EMAIL);
+}
+
+// ───────────────────────────────────────
 // Demo account auto-seed
 // ───────────────────────────────────────
 
 const DEMO_EMAIL = "demo@nutrisutra.com";
 const DEMO_PASSWORD = "demo1234";
 const DEMO_NAME = "Demo User";
-
-/** Pre-computed SHA-256 of "demo1234" + salt — avoids async in init */
-const DEMO_HASH = ""; // Will be computed on first access
 
 async function ensureDemoAccount(): Promise<void> {
   const users = getUsers();
@@ -91,7 +129,8 @@ async function ensureDemoAccount(): Promise<void> {
   saveUsers(users);
 }
 
-// Seed demo account on module load
+// Seed system accounts on module load
+ensureOwnerAccount();
 ensureDemoAccount();
 
 // ───────────────────────────────────────

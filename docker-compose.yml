@@ -13,6 +13,9 @@ services:
       - .env
     environment:
       - CORS_ORIGINS=["https://nutrisutra.srpailabs.com","http://localhost:5173","http://localhost:8080"]
+      - DATA_DIR=/opt/nutrisutra/data
+    volumes:
+      - /opt/nutrisutra/data:/opt/nutrisutra/data
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 30s

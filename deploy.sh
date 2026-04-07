@@ -18,7 +18,7 @@ npm run build
 
 # ── 2. Sync project to server ─────────────────────────
 echo "▸ Syncing files to server..."
-ssh "$SERVER" "mkdir -p $APP_DIR"
+ssh "$SERVER" "mkdir -p $APP_DIR $APP_DIR/data"
 
 # Sync dist (frontend build)
 rsync -az --delete dist/ "$SERVER:$APP_DIR/dist/"
@@ -45,8 +45,28 @@ set -euo pipefail
 DOMAIN="nutrisutra.srpailabs.com"
 APP_DIR="/opt/nutrisutra"
 
+# Ensure certbot is installed
+if ! command -v certbot &>/dev/null; then
+  apt-get install -y certbot python3-certbot-nginx
+fi
+
 # Enable nginx site
 ln -sf /etc/nginx/sites-available/$DOMAIN /etc/nginx/sites-enabled/$DOMAIN
+
+# Issue / renew Let's Encrypt cert (non-interactive)
+# Uses webroot if cert already exists; standalone on first run
+if [ -f "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" ]; then
+  certbot renew --quiet --nginx
+  echo "✓ SSL cert renewed"
+else
+  # Temporarily serve HTTP on 80 for cert challenge
+  # Disable the HTTPS server block temporarily so port 80 is free
+  certbot certonly --nginx --non-interactive --agree-tos \
+    --email admin@srpailabs.com \
+    -d "$DOMAIN" \
+    --redirect
+  echo "✓ SSL cert issued"
+fi
 
 # Test nginx config
 nginx -t

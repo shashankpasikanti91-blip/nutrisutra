@@ -64,30 +64,55 @@ export function CameraCapture({ onCapture, disabled }: CameraCaptureProps) {
       stopStream();
 
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: facing, width: { ideal: 1280 }, height: { ideal: 960 } },
+        video: {
+          facingMode: { ideal: facing },
+          width: { ideal: 1280 },
+          height: { ideal: 960 },
+        },
         audio: false,
       });
       streamRef.current = stream;
 
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play();
-      }
+      // setCameraActive first so the <video> element mounts, then assign srcObject
+      // in a follow-up microtask so the ref is populated.
       setCameraActive(true);
       setFacingMode(facing);
-    } catch {
-      setCameraError("Camera access denied. Use the gallery instead.");
+
+      // Wait a tick for React to mount the video element
+      await new Promise<void>((resolve) => setTimeout(resolve, 0));
+
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        try {
+          await videoRef.current.play();
+        } catch {
+          // play() rejection is non-fatal on some browsers; the stream still renders
+        }
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.toLowerCase().includes("not allowed") || msg.toLowerCase().includes("permission")) {
+        setCameraError("Camera access denied. Please allow camera permission and try again.");
+      } else if (msg.toLowerCase().includes("not found") || msg.toLowerCase().includes("notfound")) {
+        setCameraError("No camera found on this device. Use the gallery instead.");
+      } else {
+        setCameraError("Could not start camera. Use the gallery button below.");
+      }
       setCameraActive(false);
+      stopStream();
     } finally {
       setStarting(false);
     }
-  }, [facingMode, stopStream]);
+  }, [facingMode, stopStream, canUseGetUserMedia]);
 
-  // Switch front/back
+  // Switch front/back — stop existing stream then restart with new facing mode
   const switchCamera = useCallback(() => {
     const next = facingMode === "environment" ? "user" : "environment";
-    startCamera(next);
-  }, [facingMode, startCamera]);
+    setCameraActive(false);
+    stopStream();
+    // Small delay lets React unmount the video element cleanly before re-mounting
+    setTimeout(() => startCamera(next), 80);
+  }, [facingMode, startCamera, stopStream]);
 
   // Capture photo from video stream
   const capturePhoto = useCallback(() => {

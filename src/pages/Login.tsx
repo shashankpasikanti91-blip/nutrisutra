@@ -5,7 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Navbar from "@/components/Navbar";
 import logoIcon from "@/assets/logo-icon.png";
-import { loginUser } from "@/lib/auth-store";
+import { loginUser, isAdmin } from "@/lib/auth-store";
+import { reportLogin } from "@/lib/api/events";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -21,7 +22,13 @@ const Login = () => {
     const result = await loginUser(email, password);
     setLoading(false);
     if (result.success) {
-      navigate("/app/dashboard");
+      reportLogin(email);
+      // Owner goes to admin dashboard
+      if (isAdmin()) {
+        navigate("/app/admin");
+      } else {
+        navigate("/app/dashboard");
+      }
     } else {
       setError(result.error);
     }
