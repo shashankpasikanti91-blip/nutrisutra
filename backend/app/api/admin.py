@@ -92,15 +92,8 @@ async def record_event(payload: EventPayload, request: Request):
         await send_telegram_message(msg)
 
     elif payload.type == "food_scan":
-        food = payload.data.get("food_name", "unknown")
-        cal = payload.data.get("calories", "—")
-        msg = (
-            f"📸 <b>Food Scan</b>\n"
-            f"📧 {payload.email}\n"
-            f"🍽 {food} · {cal} kcal\n"
-            f"🕐 {now}"
-        )
-        await send_telegram_message(msg)
+        # Tenant privacy: do NOT log what food was scanned — just count the activity
+        pass
 
     elif payload.type == "error":
         err = payload.data.get("message", "unknown")

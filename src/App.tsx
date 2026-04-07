@@ -19,6 +19,8 @@ import History from "./pages/app/History.tsx";
 import Insights from "./pages/app/Insights.tsx";
 import Settings from "./pages/app/Settings.tsx";
 import AdminDashboard from "./pages/app/Admin.tsx";
+import Terms from "./pages/Terms.tsx";
+import Privacy from "./pages/Privacy.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { InstallPrompt } from "@/components/common/InstallPrompt";
 import { ProtectedRoute } from "@/components/common/ProtectedRoute";
@@ -51,6 +53,8 @@ const App = () => (
           <Route path="/app/insights" element={<ProtectedRoute><Insights /></ProtectedRoute>} />
           <Route path="/app/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
           <Route path="/app/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

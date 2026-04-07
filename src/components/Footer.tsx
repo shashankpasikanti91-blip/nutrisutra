@@ -27,8 +27,8 @@ const Footer = () => (
         <div>
           <h4 className="text-sm font-semibold text-foreground">Legal</h4>
           <div className="mt-3 flex flex-col gap-2">
-            <span className="text-sm text-muted-foreground">Privacy Policy</span>
-            <span className="text-sm text-muted-foreground">Terms of Service</span>
+            <Link to="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Terms of Service</Link>
           </div>
         </div>
       </div>
