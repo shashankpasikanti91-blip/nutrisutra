@@ -50,6 +50,18 @@ export function CameraCapture({ onCapture, disabled }: CameraCaptureProps) {
     };
   }, []);
 
+  // After React renders the <video> element (cameraActive = true),
+  // assign the stream to srcObject and play. This is the only reliable way —
+  // doing it inline after setState is a race condition (videoRef is still null).
+  useEffect(() => {
+    if (cameraActive && videoRef.current && streamRef.current) {
+      videoRef.current.srcObject = streamRef.current;
+      videoRef.current.play().catch(() => {
+        // play() rejection is non-fatal; stream still renders on most browsers
+      });
+    }
+  }, [cameraActive]);
+
   // Start camera
   const startCamera = useCallback(async (facing: "environment" | "user" = facingMode) => {
     // On insecure context (HTTP on mobile), open native camera via file input
@@ -73,22 +85,11 @@ export function CameraCapture({ onCapture, disabled }: CameraCaptureProps) {
       });
       streamRef.current = stream;
 
-      // setCameraActive first so the <video> element mounts, then assign srcObject
-      // in a follow-up microtask so the ref is populated.
+      // setCameraActive triggers a re-render which mounts the <video> element.
+      // The useEffect([cameraActive]) then assigns srcObject + plays — that's
+      // the only reliable way since videoRef is null until after the render.
       setCameraActive(true);
       setFacingMode(facing);
-
-      // Wait a tick for React to mount the video element
-      await new Promise<void>((resolve) => setTimeout(resolve, 0));
-
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        try {
-          await videoRef.current.play();
-        } catch {
-          // play() rejection is non-fatal on some browsers; the stream still renders
-        }
-      }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       if (msg.toLowerCase().includes("not allowed") || msg.toLowerCase().includes("permission")) {
@@ -230,7 +231,7 @@ export function CameraCapture({ onCapture, disabled }: CameraCaptureProps) {
               autoPlay
               playsInline
               muted
-              className="w-full aspect-[4/3] object-cover rounded-3xl mirror"
+              className="w-full aspect-[4/3] object-cover rounded-3xl"
               style={facingMode === "user" ? { transform: "scaleX(-1)" } : undefined}
             />
 
