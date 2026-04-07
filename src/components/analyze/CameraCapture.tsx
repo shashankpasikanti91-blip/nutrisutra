@@ -50,17 +50,18 @@ export function CameraCapture({ onCapture, disabled }: CameraCaptureProps) {
     };
   }, []);
 
-  // After React renders the <video> element (cameraActive = true),
-  // assign the stream to srcObject and play. This is the only reliable way —
-  // doing it inline after setState is a race condition (videoRef is still null).
-  useEffect(() => {
-    if (cameraActive && videoRef.current && streamRef.current) {
-      videoRef.current.srcObject = streamRef.current;
-      videoRef.current.play().catch(() => {
-        // play() rejection is non-fatal; stream still renders on most browsers
+  // Callback ref — fires the exact moment React inserts <video> into the DOM.
+  // Using useEffect([cameraActive]) doesn't work because AnimatePresence mode="wait"
+  // delays the mount until after the exit animation, so videoRef is still null.
+  const videoCallbackRef = useCallback((node: HTMLVideoElement | null) => {
+    videoRef.current = node;
+    if (node && streamRef.current) {
+      node.srcObject = streamRef.current;
+      node.play().catch(() => {
+        // Non-fatal — stream still renders on most browsers
       });
     }
-  }, [cameraActive]);
+  }, []);
 
   // Start camera
   const startCamera = useCallback(async (facing: "environment" | "user" = facingMode) => {
@@ -227,7 +228,7 @@ export function CameraCapture({ onCapture, disabled }: CameraCaptureProps) {
             className="relative overflow-hidden rounded-3xl bg-black"
           >
             <video
-              ref={videoRef}
+              ref={videoCallbackRef}
               autoPlay
               playsInline
               muted
