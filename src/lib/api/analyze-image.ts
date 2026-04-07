@@ -91,34 +91,39 @@ function resizeImage(file: File): Promise<File> {
   });
 }
 
-const SYSTEM_PROMPT = `You are a food/nutrition detection AI. Given a photo of food, identify every distinct food item visible.
+const SYSTEM_PROMPT = `You are an advanced food/nutrition detection AI specializing in Indian and global cuisine. Given a photo of food, identify every distinct food item visible with precision.
 
 Return ONLY valid JSON matching this schema (no markdown, no explanation):
 {
-  "meal_name": "short descriptive name",
-  "cuisine": "detected cuisine or Unknown",
+  "meal_name": "short descriptive name of the overall meal",
+  "cuisine": "detected cuisine (e.g. South Indian, North Indian, Chinese, Western, etc.)",
   "food_items": [
     {
-      "food_name": "display name",
-      "normalized_food_name": "lowercase lookup key (e.g. chicken biryani, idli, sambar)",
+      "food_name": "precise display name (e.g. Masala Dosa, Butter Chicken, French Fries)",
+      "normalized_food_name": "lowercase lookup key matching common names (e.g. masala dosa, butter chicken, fries, banana)",
       "quantity": 1,
       "unit": "plate|piece|cup|bowl|glass|serving",
       "portion_size": "small|medium|large",
-      "cooking_style": "fried|boiled|steamed|grilled|baked|raw|mixed|unknown",
+      "cooking_style": "fried|deep-fried|boiled|steamed|grilled|baked|raw|mixed|unknown",
       "oil_level": "low|medium|high|unknown",
       "confidence": 0.85
     }
   ],
   "overall_confidence": 0.85,
-  "notes": ""
+  "notes": "any relevant observation about the meal"
 }
 
 Rules:
-- List EVERY visible food item separately (rice, dal, curry, roti, chutney, etc.)
-- Use common Indian food names when applicable (idli, dosa, sambar, chapati, dal, biryani, etc.)
+- List EVERY visible food item separately (rice, dal, curry, roti, chutney, pickle, etc.)
+- Use common Indian food names when applicable (idli, dosa, sambar, chapati, dal, biryani, vada, etc.)
+- For oily/fried food visible with excess oil, set oil_level to "high" and cooking_style to "fried"
+- For clearly greasy, deep-fried items (pakora, vada, samosa, fries), set cooking_style to "deep-fried" and oil_level to "high"
+- For steamed/boiled items (idli, boiled rice, etc.), set cooking_style accordingly with oil_level "low"
 - Estimate realistic quantities visible in the image
 - confidence is 0.0 to 1.0
-- If the image is not food, set overall_confidence to 0 and food_items to []`;
+- If image is not food, set overall_confidence to 0 and food_items to []
+- Preserve the exact food name as visible — do not generalize "chicken curry" as just "curry"`;
+
 
 /**
  * Send image to OpenRouter vision model for food detection.

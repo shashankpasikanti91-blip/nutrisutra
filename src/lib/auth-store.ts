@@ -186,7 +186,8 @@ export async function registerUser(
 
 export async function loginUser(
   email: string,
-  password: string
+  password: string,
+  rememberMe = false
 ): Promise<{ success: true; session: AuthSession } | { success: false; error: string }> {
   const trimmedEmail = email.trim().toLowerCase();
   const users = getUsers();
@@ -202,7 +203,16 @@ export async function loginUser(
     userId: user.id, email: user.email, name: user.name,
     createdAt: user.createdAt, trialEndsAt: user.trialEndsAt,
   };
-  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  // Remember Me: persist to localStorage (survives browser close).
+  // Without it: sessionStorage clears when tab/browser is closed.
+  if (rememberMe) {
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    localStorage.setItem("nutrisutra_remember", "1");
+  } else {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    localStorage.removeItem("nutrisutra_remember");
+    localStorage.removeItem(SESSION_KEY);
+  }
   return { success: true, session };
 }
 
@@ -212,7 +222,8 @@ export async function loginUser(
 
 export function getSession(): AuthSession | null {
   try {
-    const raw = localStorage.getItem(SESSION_KEY);
+    // Check localStorage first (remember me), then sessionStorage
+    const raw = localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY);
     if (raw) return JSON.parse(raw);
   } catch {}
   return null;
@@ -220,6 +231,8 @@ export function getSession(): AuthSession | null {
 
 export function logout() {
   localStorage.removeItem(SESSION_KEY);
+  sessionStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem("nutrisutra_remember");
 }
 
 export function isLoggedIn(): boolean {

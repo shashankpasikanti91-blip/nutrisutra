@@ -55,7 +55,9 @@ const MODIFIER_RULES: ModifierRule[] = [
   { pattern: /\bout\s*side\b/i, modifier: "restaurant" },
   { pattern: /\bboiled\b/i, modifier: "boiled" },
   { pattern: /\bfried\b/i, modifier: "fried" },
+  { pattern: /\bfry\b/i, modifier: "fried" },
   { pattern: /\bdeep\s*fried\b/i, modifier: "fried" },
+  { pattern: /\bdeep\s*fry\b/i, modifier: "fried" },
   { pattern: /\bsteamed\b/i, modifier: "steamed" },
   { pattern: /\broasted\b/i, modifier: "roasted" },
   { pattern: /\bbaked\b/i, modifier: "baked" },
@@ -158,10 +160,11 @@ function extractQuantityAndUnit(text: string): {
 const FOOD_ALIASES: Record<string, string> = {
   "white coffee": "milk coffee",
   "black coffee": "coffee",
-  "masala tea": "tea",
-  "chai": "tea",
+  "masala tea": "masala chai",
+  "chai": "masala chai",
   "milk tea": "tea",
-  "green tea": "black tea",
+  // green tea stays as green tea — do NOT remap to black tea
+  "matcha": "green tea",
   "pappu": "dal",
   "lentils": "dal",
   "daal": "dal",
@@ -202,6 +205,25 @@ const FOOD_ALIASES: Record<string, string> = {
   "steamed rice": "white rice",
   "annam": "white rice",
   "sambhar": "sambar",
+  // fried variants — strip "fry"/"fried" suffix and rely on modifier
+  "banana fry": "banana",
+  "banana fries": "banana",
+  "plantain fry": "banana",
+  "egg fry": "egg",
+  "fish fry": "fish curry",
+  "chicken fry": "chicken curry",
+  "prawn fry": "prawn",
+  "veg fry": "veg curry",
+  "paneer fry": "paneer",
+  "potato fry": "aloo",
+  "aloo fry": "aloo",
+  "gobi fry": "gobi",
+  // common misspellings
+  "dosa plain": "plain dosa",
+  "masala dosa": "masala dosa",
+  "plain dosa": "plain dosa",
+  "omelette": "omelette",
+  "omlet": "omelette",
 };
 
 function normalizeFoodName(text: string): string {
@@ -217,6 +239,15 @@ function normalizeFoodName(text: string): string {
     if (lower === alias) {
       return canonical;
     }
+  }
+
+  // Smart suffix stripping: "banana fry" → "banana", "chicken fried" → "chicken"
+  // (modifier "fried" is already captured by MODIFIER_RULES above)
+  const stripSuffixes = /\s+(fry|fried|roast|roasted|curry|gravy|masala)$/i;
+  const stripped = lower.replace(stripSuffixes, "").trim();
+  if (stripped !== lower) {
+    if (FOOD_ALIASES[stripped]) return FOOD_ALIASES[stripped];
+    return stripped;
   }
 
   return lower;

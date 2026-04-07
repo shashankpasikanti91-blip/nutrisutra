@@ -9,8 +9,8 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import {
-  BiryaniIcon, DosaIcon, CurryIcon, ChickenIcon, ThaliIcon, StreetFoodIcon,
-  BreakfastIcon, SamosaIcon, SweetIcon, FishIcon, IdliIcon,
+  ThaliIcon, StreetFoodIcon,
+  BreakfastIcon, SamosaIcon, SweetIcon, FishIcon,
   DiabetesIcon, BPHighIcon, BPLowIcon, NightIcon,
 } from "@/components/FoodIcons";
 import { getRegionalCategoryCounts, getFunctionalCategoryCounts, getTotalFoodCount } from "@/lib/food-catalog";
@@ -20,19 +20,21 @@ const fadeIn = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { du
 const stagger = { visible: { transition: { staggerChildren: 0.08 } } };
 
 const popularFoods = [
-  { name: "Biryani", Icon: BiryaniIcon, cal: "350 kcal", tag: "Hyderabadi", color: "from-orange-400 to-red-500" },
-  { name: "Masala Dosa", Icon: DosaIcon, cal: "210 kcal", tag: "South Indian", color: "from-yellow-400 to-orange-500" },
-  { name: "Butter Chicken", Icon: ChickenIcon, cal: "240 kcal", tag: "North Indian", color: "from-red-400 to-rose-500" },
-  { name: "Idli Sambar", Icon: IdliIcon, cal: "95 kcal", tag: "Breakfast", color: "from-emerald-400 to-teal-500" },
-  { name: "Chole Bhature", Icon: CurryIcon, cal: "450 kcal", tag: "Punjabi", color: "from-amber-400 to-yellow-500" },
-  { name: "Pav Bhaji", Icon: StreetFoodIcon, cal: "320 kcal", tag: "Street Food", color: "from-pink-400 to-rose-500" },
+  { name: "Biryani", emoji: "🍛", cal: "350 kcal", tag: "Hyderabadi", color: "from-orange-400 to-red-500" },
+  { name: "Masala Dosa", emoji: "🫓", cal: "210 kcal", tag: "South Indian", color: "from-yellow-400 to-orange-500" },
+  { name: "Butter Chicken", emoji: "🍗", cal: "240 kcal", tag: "North Indian", color: "from-red-400 to-rose-500" },
+  { name: "Idli Sambar", emoji: "🍥", cal: "95 kcal", tag: "Breakfast", color: "from-emerald-400 to-teal-500" },
+  { name: "Chole Bhature", emoji: "🧆", cal: "450 kcal", tag: "Punjabi", color: "from-amber-400 to-yellow-500" },
+  { name: "Pav Bhaji", emoji: "🍞", cal: "320 kcal", tag: "Street Food", color: "from-pink-400 to-rose-500" },
 ];
 
 const foodTicker = [
-  "🍛 Biryani", "🥞 Dosa", "🍗 Butter Chicken", "🥘 Dal Makhani", "🧆 Samosa",
-  "🍱 Thali", "🫓 Paratha", "🍜 Ramen", "🍕 Pizza", "🍔 Burger",
-  "🥗 Salad", "🍣 Sushi", "🌮 Tacos", "🫕 Curry", "🥙 Shawarma",
-  "🍝 Pasta", "🦐 Prawn Fry", "🍩 Gulab Jamun", "🥧 Kheer", "🥟 Momos",
+  "🍛 Biryani", "� Masala Dosa", "🍗 Butter Chicken", "🫕 Dal Makhani", "🧆 Samosa",
+  "🍽️ Thali", "🫔 Paratha", "🍜 Ramen", "🍕 Pizza", "🍔 Burger",
+  "🥗 Salad", "🍣 Sushi", "🌮 Tacos", "🍲 Curry", "🥙 Shawarma",
+  "🍝 Pasta", "🦐 Prawn Fry", "🍮 Gulab Jamun", "🍨 Kheer", "🥟 Momos",
+  "🫙 Idli", "🥘 Chole", "🍚 Pulao", "🥞 Uttapam", "🌯 Frankie",
+  "🧁 Halwa", "🥜 Peanut Chaat", "🍳 Omelette", "🥑 Grilled Veggies", "🫖 Green Tea",
 ];
 
 // Regional categories computed from actual food catalog
@@ -41,16 +43,16 @@ const functionalCategories = getFunctionalCategoryCounts();
 const totalFoods = getTotalFoodCount();
 
 const categoryIconMap: Record<string, React.FC<{ className?: string; size?: number }>> = {
-  "Andhra/Telangana": BiryaniIcon,
-  "Tamil Nadu": DosaIcon,
+  "Andhra/Telangana": ThaliIcon,
+  "Tamil Nadu": ThaliIcon,
   "South India": ThaliIcon,
-  "Punjabi/North": CurryIcon,
+  "Punjabi/North": ThaliIcon,
   "Rajasthan": SamosaIcon,
   "Maharashtra": StreetFoodIcon,
   "Gujarat": SweetIcon,
   "West Bengal": FishIcon,
   "Odisha": ThaliIcon,
-  "Bihar/Jharkhand": CurryIcon,
+  "Bihar/Jharkhand": ThaliIcon,
   "Assam": FishIcon,
   "Breakfast": BreakfastIcon,
   "Main Course": ThaliIcon,
@@ -155,7 +157,7 @@ const Index = () => (
                 {popularFoods.map((food) => (
                   <div key={food.name} className="group relative rounded-2xl overflow-hidden bg-muted/50 p-3.5 transition-all hover:scale-[1.04] hover:shadow-lg cursor-pointer">
                     <div className={`absolute inset-0 bg-gradient-to-br ${food.color} opacity-0 group-hover:opacity-8 transition-opacity`} />
-                    <food.Icon className="text-emerald-600 dark:text-emerald-400" size={30} />
+                    <span className="text-3xl" role="img" aria-label={food.name}>{food.emoji}</span>
                     <p className="mt-1.5 text-xs font-bold text-foreground leading-tight">{food.name}</p>
                     <p className="text-[10px] text-muted-foreground font-medium">{food.cal}</p>
                     <span className="mt-1.5 inline-block rounded-full bg-emerald-100 dark:bg-emerald-900/40 px-2 py-0.5 text-[9px] font-bold text-emerald-700 dark:text-emerald-300">{food.tag}</span>

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import Navbar from "@/components/Navbar";
 import logoIcon from "@/assets/logo-icon.png";
 import { loginUser, isAdmin } from "@/lib/auth-store";
@@ -11,6 +12,7 @@ import { reportLogin } from "@/lib/api/events";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -19,7 +21,7 @@ const Login = () => {
     e.preventDefault();
     setError("");
     setLoading(true);
-    const result = await loginUser(email, password);
+    const result = await loginUser(email, password, rememberMe);
     setLoading(false);
     if (result.success) {
       reportLogin(email);
@@ -60,9 +62,20 @@ const Login = () => {
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1" required />
             </div>
-            <div className="text-right">
+
+            {/* Remember Me + Forgot Password row */}
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-2 cursor-pointer select-none">
+                <Checkbox
+                  id="remember-me"
+                  checked={rememberMe}
+                  onCheckedChange={(checked) => setRememberMe(checked === true)}
+                />
+                <span className="text-sm text-muted-foreground">Remember me</span>
+              </label>
               <Link to="/forgot-password" className="text-sm text-primary hover:underline">Forgot password?</Link>
             </div>
+
             <Button variant="hero" className="w-full" size="lg" type="submit" disabled={loading}>
               {loading ? "Logging in..." : "Log In"}
             </Button>

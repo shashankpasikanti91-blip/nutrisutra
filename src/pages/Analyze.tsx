@@ -14,6 +14,7 @@ import { CameraCapture } from "@/components/analyze/CameraCapture";
 import { GoalSelector } from "@/components/analyze/GoalSelector";
 import { DecisionCard } from "@/components/analyze/DecisionCard";
 import { WhyThisResult } from "@/components/analyze/WhyThisResult";
+import { SmartTips } from "@/components/analyze/SmartTips";
 import { computeDecision } from "@/lib/decision-engine";
 import { generateImageHash } from "@/lib/image/hash";
 import { getCachedImageResult, setCachedImageResult, clearExpiredImageCache } from "@/lib/image/cache";
@@ -157,7 +158,7 @@ const Analyze = () => {
     setHasSearched(true);
     setCachedHit(false);
     setImageMessage(null);
-    reportFoodScan(getSession()?.email ?? "", nutrition.name || nutrition.barcode, barcodeResult.calories ?? 0);
+    reportFoodScan(getSession()?.email ?? "", nutrition.productName || nutrition.barcode, barcodeResult.totals.calories ?? 0);
     scrollToResults();
   }, [goal]);
 
@@ -185,7 +186,7 @@ const Analyze = () => {
     setHasSearched(true);
     setCachedHit(false);
     setImageMessage(null);
-    reportFoodScan(getSession()?.email ?? "", query, analysis.calories ?? 0);
+    reportFoodScan(getSession()?.email ?? "", query, analysis.totals.calories ?? 0);
     scrollToResults();
   };
 
@@ -266,6 +267,25 @@ const Analyze = () => {
         const textRepresentation = detectedItems
           .map((item) => {
             const parts: string[] = [];
+
+            // Apply cooking style modifier prefix
+            if (item.cooking_style === "fried" || item.cooking_style === "deep-fried") {
+              parts.push("fried");
+            } else if (item.cooking_style === "steamed") {
+              parts.push("steamed");
+            } else if (item.cooking_style === "boiled") {
+              parts.push("boiled");
+            } else if (item.cooking_style === "grilled") {
+              parts.push("roasted");
+            }
+
+            // Apply oil level modifier
+            if (item.oil_level === "high") {
+              parts.push("oily");
+            } else if (item.oil_level === "low") {
+              parts.push("low oil");
+            }
+
             if (item.quantity > 1) parts.push(String(item.quantity));
             parts.push(item.normalized_food_name || item.food_name);
             return parts.join(" ");
@@ -275,9 +295,10 @@ const Analyze = () => {
         const parsed = parseInput(textRepresentation);
         const analysis = analyzeInput(parsed);
 
-        // Add image-source note
-        analysis.notes.unshift("Detected from uploaded image via AI.");
-        if (apiResult.response.parsed_input.cuisine) {
+        // Build rich AI detection note
+        const detectedNames = detectedItems.map(i => i.food_name).join(", ");
+        analysis.notes.unshift(`AI detected: ${detectedNames}`);
+        if (apiResult.response.parsed_input.cuisine && apiResult.response.parsed_input.cuisine !== "Unknown") {
           analysis.notes.push(
             `Detected cuisine: ${apiResult.response.parsed_input.cuisine}`
           );
@@ -300,7 +321,7 @@ const Analyze = () => {
         setHasSearched(true);
         setCachedHit(false);
         setImageStatus("done");
-        reportFoodScan(getSession()?.email ?? "", textRepresentation, analysis.calories ?? 0);
+        reportFoodScan(getSession()?.email ?? "", textRepresentation, analysis.totals.calories ?? 0);
         scrollToResults();
       }
     } catch (err) {
@@ -568,6 +589,9 @@ const Analyze = () => {
 
               {/* Calories + Macros — always visible */}
               <CalorieCard result={result} />
+
+              {/* Smart Tips — always visible, prominent */}
+              <SmartTips result={result} goal={goal} />
 
               {/* Show more toggle */}
               <button
