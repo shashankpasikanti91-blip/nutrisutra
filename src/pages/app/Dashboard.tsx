@@ -73,7 +73,7 @@ const Dashboard = () => {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
             <Input placeholder="Search food — e.g. masala dosa, burger, nasi lemak..." value={search} onChange={(e) => setSearch(e.target.value)} className="h-12 pl-10 pr-12 text-base" />
-            <Link to="/app/food?image=true" className="absolute right-2 top-1/2 -translate-y-1/2">
+            <Link to="/analyze" className="absolute right-2 top-1/2 -translate-y-1/2">
               <Button variant="ghost" size="icon" type="button"><Camera className="h-5 w-5 text-muted-foreground" /></Button>
             </Link>
           </div>
