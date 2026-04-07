@@ -1183,7 +1183,7 @@ export const FOOD_DATABASE: Record<string, FoodEntry> = {
   BLACK_TEA: {
     code: "BLACK_TEA",
     name: "Black Tea",
-    aliases: ["black tea", "plain tea", "tea without milk", "green tea"],
+    aliases: ["black tea", "plain tea", "tea without milk"],
     cuisine: "Global",
     category: "Drink",
     isVeg: true,

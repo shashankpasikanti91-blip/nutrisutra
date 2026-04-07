@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ShieldCheck } from "lucide-react";
 import logoIcon from "@/assets/logo-icon.png";
-import { getSession } from "@/lib/auth-store";
+import { getSession, isAdmin } from "@/lib/auth-store";
 
 const publicNavLinks = [
   { label: "Home", to: "/" },
@@ -22,6 +22,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const session = getSession();
+  const adminUser = session ? isAdmin() : false;
   const navLinks = session ? authNavLinks : publicNavLinks;
 
   return (
@@ -48,12 +49,16 @@ const Navbar = () => {
             </Link>
           ))}
           {session ? (
-            <Link to="/app/dashboard">
+            <Link to={adminUser ? "/app/admin" : "/app/dashboard"}>
               <Button size="sm" variant="outline" className="gap-1.5">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-bold text-white">
-                  {session.name.charAt(0).toUpperCase()}
-                </span>
-                Dashboard
+                {adminUser ? (
+                  <ShieldCheck className="h-4 w-4 text-primary" />
+                ) : (
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-bold text-white">
+                    {session.name.charAt(0).toUpperCase()}
+                  </span>
+                )}
+                {adminUser ? "Admin Panel" : "Dashboard"}
               </Button>
             </Link>
           ) : (
@@ -92,8 +97,10 @@ const Navbar = () => {
               </Link>
             ))}
             {session ? (
-              <Link to="/app/dashboard" onClick={() => setOpen(false)}>
-                <Button variant="outline" className="w-full">Dashboard</Button>
+              <Link to={adminUser ? "/app/admin" : "/app/dashboard"} onClick={() => setOpen(false)}>
+                <Button variant="outline" className="w-full">
+                  {adminUser ? "Admin Panel" : "Dashboard"}
+                </Button>
               </Link>
             ) : (
               <>

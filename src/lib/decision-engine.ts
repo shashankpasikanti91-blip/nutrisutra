@@ -145,17 +145,20 @@ export function computeDecision(result: AnalysisResult, goal: UserGoal, options?
     else verdict = "avoid";
   }
 
+  // ── Skip detailed reasons for near-zero calorie drinks (green tea, water, etc.) ──
+  const isTrivialBeverage = totals.calories < 10;
+
   // ── Reasons ──
-  // Protein
-  if (proteinPct < 15) {
+  // Protein (skip for near-zero cal beverages)
+  if (!isTrivialBeverage && proteinPct < 15) {
     reasons.push("Low protein content");
     suggestions.push("Add a boiled egg or dal for protein");
-  } else if (proteinPct >= 25) {
+  } else if (!isTrivialBeverage && proteinPct >= 25) {
     reasons.push("Good protein content");
   }
 
   // Carbs
-  if (carbPct > 60) {
+  if (!isTrivialBeverage && carbPct > 60) {
     reasons.push("High carb ratio");
     if (goal === "lose") suggestions.push("Reduce rice or bread portion by 30%");
   }
@@ -172,8 +175,8 @@ export function computeDecision(result: AnalysisResult, goal: UserGoal, options?
     if (goal === "lose") suggestions.push("Switch to no-sugar or half-sugar version");
   }
 
-  // Fiber
-  if (totals.fiber < 2 && totals.calories > 200) {
+  // Fiber (only relevant for real meals)
+  if (!isTrivialBeverage && totals.fiber < 2 && totals.calories > 200) {
     reasons.push("Low fiber content");
     suggestions.push("Add vegetables or a side salad");
   }
@@ -248,7 +251,7 @@ export function computeDecision(result: AnalysisResult, goal: UserGoal, options?
   return {
     verdict,
     headline: headlines[goal][verdict],
-    reasons: reasons.length > 0 ? reasons : ["Balanced macro profile"],
+    reasons: reasons.length > 0 ? reasons : isTrivialBeverage ? ["Near-zero calories", "Hydrating choice"] : ["Balanced macro profile"],
     suggestions: suggestions.slice(0, 3), // max 3
     cuisine,
     mealName,

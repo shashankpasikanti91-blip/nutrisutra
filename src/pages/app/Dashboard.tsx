@@ -1,11 +1,11 @@
 import { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Camera, Plus, Flame, Drumstick, Wheat, Droplets, TrendingUp, Award, Target, ClipboardList, Settings2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { getDailyLog, getDayTotals, getStreaks } from "@/lib/demo-store";
-import { getSession } from "@/lib/auth-store";
+import { getSession, isAdmin } from "@/lib/auth-store";
 import { AIDietGuide } from "@/components/analyze/AIDietGuide";
 
 const quickChips = ["Idli", "Dosa", "Biryani", "Burger", "Pizza", "Nasi Lemak", "Fried Rice", "Salad"];
@@ -18,6 +18,9 @@ const Dashboard = () => {
   const streaks = useMemo(() => getStreaks(), []);
   const session = useMemo(() => getSession(), []);
   const userName = session?.name?.split(" ")[0] || "there";
+
+  // Redirect admin users to the admin panel
+  if (isAdmin()) return <Navigate to="/app/admin" replace />;
 
   const dailyCal = Math.round(totals.calories);
   const goalCal = log.calorieGoal;

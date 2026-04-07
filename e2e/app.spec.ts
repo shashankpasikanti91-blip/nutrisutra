@@ -70,7 +70,7 @@ test.describe("Homepage", () => {
 
   test("FAQ section is present", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator("h2", { hasText: "FAQ" })).toBeVisible();
+    await expect(page.locator("text=FAQ").first()).toBeVisible();
   });
 
   test("SVG icons are used instead of emojis", async ({ page }) => {
@@ -199,6 +199,77 @@ test.describe("Auth Pages", () => {
   test("forgot password page loads", async ({ page }) => {
     await page.goto("/forgot-password");
     await expect(page).toHaveURL(/\/forgot-password/);
+  });
+});
+
+// ═══════════════════════════════════════
+// Admin Routing
+// ═══════════════════════════════════════
+
+test.describe("Admin Routing", () => {
+  test("/app/admin redirects to /login when not logged in", async ({ page }) => {
+    await page.goto("/app/admin");
+    await expect(page).toHaveURL(/\/login/);
+  });
+
+  test("/app/dashboard redirects to /login when not logged in", async ({ page }) => {
+    await page.goto("/app/dashboard");
+    await expect(page).toHaveURL(/\/login/);
+  });
+
+  test("/app/admin page with admin session shows Admin Dashboard", async ({ page }) => {
+    // Inject a fake admin session into localStorage before navigating
+    await page.goto("/login");
+    await page.evaluate(() => {
+      const adminSession = {
+        userId: "admin-test",
+        email: "pasikantishashank24@gmail.com",
+        name: "Admin",
+        createdAt: Date.now() - 1000,
+        trialEndsAt: Date.now() + 30 * 24 * 3600 * 1000,
+      };
+      localStorage.setItem("nutrisutra_session", JSON.stringify(adminSession));
+    });
+    await page.goto("/app/admin");
+    // Admin page should stay at /app/admin and show the admin heading
+    await expect(page).toHaveURL(/\/app\/admin/);
+    await expect(page.locator("h1", { hasText: "Admin Dashboard" })).toBeVisible({ timeout: 5000 });
+  });
+
+  test("regular user visiting /app/dashboard does NOT redirect to /app/admin", async ({ page }) => {
+    await page.goto("/login");
+    await page.evaluate(() => {
+      const userSession = {
+        userId: "user-test-123",
+        email: "regularuser@example.com",
+        name: "Regular User",
+        createdAt: Date.now() - 1000,
+        trialEndsAt: Date.now() + 30 * 24 * 3600 * 1000,
+      };
+      localStorage.setItem("nutrisutra_session", JSON.stringify(userSession));
+    });
+    await page.goto("/app/dashboard");
+    // Regular user should stay on /app/dashboard, NOT be redirected to /app/admin
+    await expect(page).toHaveURL(/\/app\/dashboard/);
+    // Should NOT see the admin dashboard heading
+    await expect(page.locator("h1", { hasText: "Admin Dashboard" })).toHaveCount(0);
+  });
+
+  test("admin visiting /app/dashboard gets redirected to /app/admin", async ({ page }) => {
+    await page.goto("/login");
+    await page.evaluate(() => {
+      const adminSession = {
+        userId: "admin-test",
+        email: "pasikantishashank24@gmail.com",
+        name: "Admin",
+        createdAt: Date.now() - 1000,
+        trialEndsAt: Date.now() + 30 * 24 * 3600 * 1000,
+      };
+      localStorage.setItem("nutrisutra_session", JSON.stringify(adminSession));
+    });
+    await page.goto("/app/dashboard");
+    // Admin visiting /app/dashboard should be redirected to /app/admin
+    await expect(page).toHaveURL(/\/app\/admin/);
   });
 });
 

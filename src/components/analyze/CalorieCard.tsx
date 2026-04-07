@@ -81,9 +81,12 @@ export function CalorieCard({ result }: CalorieCardProps) {
     low: "Estimated",
   }[confidence];
 
-  const proteinPct = Math.round((totals.protein * 4) / (totals.calories || 1) * 100);
-  const carbsPct = Math.round((totals.carbs * 4) / (totals.calories || 1) * 100);
-  const fatPct = Math.round((totals.fat * 9) / (totals.calories || 1) * 100);
+  // For zero/near-zero calorie items (e.g. green tea), avoid 100% carb artifact
+  const hasCalories = totals.calories > 5;
+  const macroCals = (totals.protein * 4) + (totals.carbs * 4) + (totals.fat * 9) || 1;
+  const proteinPct = hasCalories ? Math.round((totals.protein * 4) / macroCals * 100) : 0;
+  const carbsPct = hasCalories ? Math.round((totals.carbs * 4) / macroCals * 100) : 0;
+  const fatPct = hasCalories ? Math.round((totals.fat * 9) / macroCals * 100) : 0;
 
   return (
     <motion.div
