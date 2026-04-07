@@ -5,10 +5,16 @@ import { Menu, X } from "lucide-react";
 import logoIcon from "@/assets/logo-icon.png";
 import { getSession } from "@/lib/auth-store";
 
-const navLinks = [
+const publicNavLinks = [
   { label: "Home", to: "/" },
   { label: "Analyze", to: "/analyze" },
   { label: "Demo", to: "/demo" },
+  { label: "Pricing", to: "/pricing" },
+];
+
+const authNavLinks = [
+  { label: "Home", to: "/" },
+  { label: "Analyze", to: "/analyze" },
   { label: "Pricing", to: "/pricing" },
 ];
 
@@ -16,6 +22,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const session = getSession();
+  const navLinks = session ? authNavLinks : publicNavLinks;
 
   return (
     <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-lg">
@@ -40,9 +47,6 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
-          <Link to="/demo">
-            <Button variant="hero" size="sm">Try Free Demo</Button>
-          </Link>
           {session ? (
             <Link to="/app/dashboard">
               <Button size="sm" variant="outline" className="gap-1.5">
@@ -54,6 +58,9 @@ const Navbar = () => {
             </Link>
           ) : (
             <>
+              <Link to="/demo">
+                <Button variant="hero" size="sm">Try Free Demo</Button>
+              </Link>
               <Link to="/login">
                 <Button variant="ghost" size="sm">Log in</Button>
               </Link>
@@ -84,15 +91,15 @@ const Navbar = () => {
                 {link.label}
               </Link>
             ))}
-            <Link to="/demo" onClick={() => setOpen(false)}>
-              <Button variant="hero" className="w-full">Try Free Demo</Button>
-            </Link>
             {session ? (
               <Link to="/app/dashboard" onClick={() => setOpen(false)}>
                 <Button variant="outline" className="w-full">Dashboard</Button>
               </Link>
             ) : (
               <>
+                <Link to="/demo" onClick={() => setOpen(false)}>
+                  <Button variant="hero" className="w-full">Try Free Demo</Button>
+                </Link>
                 <Link to="/login" onClick={() => setOpen(false)}>
                   <Button variant="ghost" className="w-full">Log in</Button>
                 </Link>

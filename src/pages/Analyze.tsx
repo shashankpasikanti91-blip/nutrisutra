@@ -20,7 +20,8 @@ import { getCachedImageResult, setCachedImageResult, clearExpiredImageCache } fr
 import { analyzeImageApi } from "@/lib/api/analyze-image";
 import { BarcodeScanner, type BarcodeNutrition } from "@/components/analyze/BarcodeScanner";
 import { getHealthProfile, saveHealthProfile } from "@/lib/demo-store";
-import { userKey } from "@/lib/auth-store";
+import { userKey, getSession } from "@/lib/auth-store";
+import { reportFoodScan } from "@/lib/api/events";
 import type { AnalysisResult, AnalyzeSource, ImageAnalysisStatus, UserGoal, MealDecision, HealthCondition } from "@/types";
 
 const fadeUp = {
@@ -156,6 +157,7 @@ const Analyze = () => {
     setHasSearched(true);
     setCachedHit(false);
     setImageMessage(null);
+    reportFoodScan(getSession()?.email ?? "", nutrition.name || nutrition.barcode, barcodeResult.calories ?? 0);
     scrollToResults();
   }, [goal]);
 
@@ -183,6 +185,7 @@ const Analyze = () => {
     setHasSearched(true);
     setCachedHit(false);
     setImageMessage(null);
+    reportFoodScan(getSession()?.email ?? "", query, analysis.calories ?? 0);
     scrollToResults();
   };
 
@@ -297,6 +300,7 @@ const Analyze = () => {
         setHasSearched(true);
         setCachedHit(false);
         setImageStatus("done");
+        reportFoodScan(getSession()?.email ?? "", textRepresentation, analysis.calories ?? 0);
         scrollToResults();
       }
     } catch (err) {
