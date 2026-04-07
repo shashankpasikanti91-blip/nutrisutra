@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Navbar from "@/components/Navbar";
 import { getSession, getTrialDaysLeft, logout, getUserProfileData, saveUserProfileData, type UserProfileData } from "@/lib/auth-store";
-import { getHealthProfile, saveHealthProfile } from "@/lib/demo-store";
+import { getHealthProfile, saveHealthProfile, computePersonalGoals, updateGoals } from "@/lib/demo-store";
 import type { HealthCondition } from "@/types";
 
 const HEALTH_CONDITIONS: { value: HealthCondition; label: string; Icon: LucideIcon; desc: string }[] = [
@@ -42,6 +42,9 @@ const Settings = () => {
   const handleSave = () => {
     saveUserProfileData(profile);
     saveHealthProfile({ conditions });
+    // Recalculate calorie + water goal from updated profile
+    const { calorieGoal, waterGoal } = computePersonalGoals();
+    updateGoals(calorieGoal, waterGoal);
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   };
@@ -77,12 +80,29 @@ const Settings = () => {
             <Input id="age" type="number" value={profile.age} onChange={(e) => updateField("age", Number(e.target.value) || 0)} className="mt-1" min={10} max={120} />
           </div>
           <div>
+            <Label htmlFor="gender">Gender</Label>
+            <select id="gender" value={profile.gender} onChange={(e) => updateField("gender", e.target.value as UserProfileData["gender"])} className={selectClass}>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          <div>
             <Label htmlFor="height">Height (cm)</Label>
             <Input id="height" type="number" value={profile.heightCm} onChange={(e) => updateField("heightCm", Number(e.target.value) || 0)} className="mt-1" min={50} max={300} />
           </div>
           <div>
             <Label htmlFor="weight">Weight (kg)</Label>
             <Input id="weight" type="number" value={profile.weightKg} onChange={(e) => updateField("weightKg", Number(e.target.value) || 0)} className="mt-1" min={20} max={500} />
+          </div>
+          <div>
+            <Label htmlFor="activity">Activity Level</Label>
+            <select id="activity" value={profile.activity} onChange={(e) => updateField("activity", e.target.value as UserProfileData["activity"])} className={selectClass}>
+              <option value="sedentary">Sedentary (desk job, no exercise)</option>
+              <option value="light">Light (1–3 days/week exercise)</option>
+              <option value="moderate">Moderate (3–5 days/week)</option>
+              <option value="active">Active (6–7 days/week)</option>
+              <option value="very_active">Very Active (athlete / physical job)</option>
+            </select>
           </div>
           <div>
             <Label htmlFor="goal">Goal</Label>

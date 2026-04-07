@@ -1,7 +1,5 @@
 /**
- * Simple localStorage-based auth with 30-day free trial.
- * This is client-side only — suitable for MVP/demo.
- * Migrate to Supabase/Firebase when ready for production.
+ * LocalStorage auth store with 30-day free trial.
  */
 
 export interface UserProfile {
@@ -18,8 +16,10 @@ export interface UserProfileData {
   name: string;
   email: string;
   age: number;
+  gender: "male" | "female";
   heightCm: number;
   weightKg: number;
+  activity: "sedentary" | "light" | "moderate" | "active" | "very_active";
   goal: "weight_loss" | "muscle_gain" | "maintenance" | "diabetic_friendly";
   diet: "non_veg" | "vegetarian" | "vegan" | "eggetarian";
   cuisine: "south_indian" | "north_indian" | "malaysian" | "chinese" | "western" | "mixed";
@@ -156,8 +156,6 @@ export async function registerUser(
   }
 
   const users = getUsers();
-
-  // Check if email already exists
   const existing = Object.values(users).find((u) => u.email === trimmedEmail);
   if (existing) {
     return { success: false, error: "An account with this email already exists. Try logging in." };
@@ -166,31 +164,19 @@ export async function registerUser(
   const now = Date.now();
   const id = `user_${now}_${Math.random().toString(36).slice(2, 8)}`;
   const passwordHash = await hashPassword(password);
-
   const user: UserProfile = {
-    id,
-    name: trimmedName,
-    email: trimmedEmail,
-    passwordHash,
-    createdAt: now,
-    trialEndsAt: now + TRIAL_DAYS * 24 * 60 * 60 * 1000,
+    id, name: trimmedName, email: trimmedEmail, passwordHash,
+    createdAt: now, trialEndsAt: now + TRIAL_DAYS * 24 * 60 * 60 * 1000,
   };
-
   users[id] = user;
   saveUsers(users);
-
-  // Initialize user profile with defaults
   initializeUserProfile(id, trimmedName, trimmedEmail);
 
   const session: AuthSession = {
-    userId: id,
-    email: user.email,
-    name: user.name,
-    createdAt: user.createdAt,
-    trialEndsAt: user.trialEndsAt,
+    userId: id, email: trimmedEmail, name: trimmedName,
+    createdAt: now, trialEndsAt: user.trialEndsAt,
   };
   localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-
   return { success: true, session };
 }
 
@@ -204,26 +190,19 @@ export async function loginUser(
 ): Promise<{ success: true; session: AuthSession } | { success: false; error: string }> {
   const trimmedEmail = email.trim().toLowerCase();
   const users = getUsers();
-
   const user = Object.values(users).find((u) => u.email === trimmedEmail);
   if (!user) {
     return { success: false, error: "No account found with this email." };
   }
-
   const passwordHash = await hashPassword(password);
   if (passwordHash !== user.passwordHash) {
     return { success: false, error: "Incorrect password. Please try again." };
   }
-
   const session: AuthSession = {
-    userId: user.id,
-    email: user.email,
-    name: user.name,
-    createdAt: user.createdAt,
-    trialEndsAt: user.trialEndsAt,
+    userId: user.id, email: user.email, name: user.name,
+    createdAt: user.createdAt, trialEndsAt: user.trialEndsAt,
   };
   localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-
   return { success: true, session };
 }
 
@@ -291,8 +270,10 @@ export function getDefaultProfileData(name: string, email: string): UserProfileD
     name,
     email,
     age: 25,
+    gender: "male",
     heightCm: 170,
     weightKg: 70,
+    activity: "light",
     goal: "maintenance",
     diet: "non_veg",
     cuisine: "south_indian",

@@ -5,3 +5,5 @@ pydantic>=2.10.0
 pydantic-settings>=2.6.0
 httpx>=0.28.0
 python-dotenv>=1.0.1
+PyJWT>=2.8.0
+passlib[bcrypt]>=1.7.4

@@ -5,7 +5,9 @@
 
 import { type NutritionResult } from "./nutrition-engine";
 import type { HealthCondition, HealthProfile } from "@/types";
-import { userKey } from "./auth-store";
+import { userKey, getUserProfileData } from "./auth-store";
+import { calculateDailyIntake } from "./intake-calculator";
+import type { ActivityLevel, Goal } from "./intake-calculator";
 
 export type MealSlot = "breakfast" | "lunch" | "dinner" | "snacks";
 
@@ -180,6 +182,35 @@ export function getSavedGoals(): { calorieGoal: number; waterGoal: number } {
   try {
     const raw = localStorage.getItem(sKey(GOALS_KEY));
     if (raw) return JSON.parse(raw);
+  } catch {}
+  // No manual goal set yet — compute from user profile
+  return computePersonalGoals();
+}
+
+/**
+ * Compute calorie + water goal from the user's saved profile (weight, height, gender, activity, goal).
+ * Falls back to 2000 kcal / 8 glasses if profile is incomplete.
+ */
+export function computePersonalGoals(): { calorieGoal: number; waterGoal: number } {
+  try {
+    const profile = getUserProfileData();
+    if (profile.weightKg > 0 && profile.heightCm > 0 && profile.age > 0) {
+      const goalMap: Record<string, Goal> = {
+        weight_loss: "lose",
+        muscle_gain: "gain",
+        maintenance: "maintain",
+        diabetic_friendly: "lose",
+      };
+      const result = calculateDailyIntake({
+        age: profile.age,
+        gender: profile.gender ?? "male",
+        weightKg: profile.weightKg,
+        heightCm: profile.heightCm,
+        activity: (profile.activity ?? "light") as ActivityLevel,
+        goal: goalMap[profile.goal] ?? "maintain",
+      });
+      return { calorieGoal: result.calories, waterGoal: result.waterGlasses };
+    }
   } catch {}
   return { calorieGoal: 2000, waterGoal: 8 };
 }

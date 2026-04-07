@@ -36,6 +36,9 @@ class Settings(BaseSettings):
     ADMIN_EMAIL: str = "pasikantishashank24@gmail.com"
     ADMIN_API_KEY: str = "ns_admin_shashank_2026_srpai"
 
+    # JWT auth
+    JWT_SECRET: str = "nutrisutra_jwt_fallback_2026_change_in_prod"
+
     @property
     def max_image_bytes(self) -> int:
         return self.MAX_IMAGE_UPLOAD_MB * 1024 * 1024
