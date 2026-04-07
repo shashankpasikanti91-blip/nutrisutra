@@ -15,9 +15,10 @@ const MAX_SIZE_LABEL = `${Math.round(MAX_IMAGE_SIZE / 1024 / 1024)} MB`;
 interface CameraCaptureProps {
   onCapture: (file: File | null) => void;
   disabled?: boolean;
+  autoStart?: boolean;
 }
 
-export function CameraCapture({ onCapture, disabled }: CameraCaptureProps) {
+export function CameraCapture({ onCapture, disabled, autoStart }: CameraCaptureProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -49,6 +50,14 @@ export function CameraCapture({ onCapture, disabled }: CameraCaptureProps) {
       if (preview) URL.revokeObjectURL(preview);
     };
   }, []);
+
+  // Auto-start camera when prop is set (e.g. opened from Dashboard camera icon)
+  useEffect(() => {
+    if (autoStart && !preview) {
+      startCamera();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoStart]);
 
   // Start camera
   const startCamera = useCallback(async (facing: "environment" | "user" = facingMode) => {

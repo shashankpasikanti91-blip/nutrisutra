@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Sparkles, ArrowRight, X, Camera, Type, Loader2, ImageOff, Zap, ChevronDown, ScanBarcode, Flame, Dumbbell, Scale, Droplet, TrendingUp, TrendingDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -61,8 +61,14 @@ const Analyze = () => {
     return (localStorage.getItem(userKey("nutrisutra_goal")) as UserGoal) || "maintain";
   });
 
+  const [searchParams] = useSearchParams();
+
   // ── Shared state ──
-  const [mode, setMode] = useState<AnalyzeSource | "barcode">("text");
+  const [mode, setMode] = useState<AnalyzeSource | "barcode">(() =>
+    searchParams.get("mode") === "camera" ? "image" : "text"
+  );
+  // autoStart camera if opened via camera icon (only on first render)
+  const autoStartCamera = searchParams.get("mode") === "camera";
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [decision, setDecision] = useState<MealDecision | null>(null);
 
@@ -473,6 +479,7 @@ const Analyze = () => {
               <CameraCapture
                 onCapture={handleFileSelect}
                 disabled={imageStatus === "uploading" || imageStatus === "hashing" || imageStatus === "analyzing"}
+                autoStart={autoStartCamera}
               />
 
               {/* Analyze button */}
