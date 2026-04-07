@@ -12,7 +12,7 @@ import type { ImageAnalysisResponse, ImageDetectionPayload } from "@/types";
 
 const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || "";
 const OPENROUTER_MODEL =
-  import.meta.env.VITE_OPENROUTER_MODEL || "openai/gpt-4.1-mini";
+  import.meta.env.VITE_OPENROUTER_MODEL || "openai/gpt-4o-mini";
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 export interface AnalyzeImageParams {
@@ -34,6 +34,60 @@ function fileToBase64(file: File): Promise<string> {
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = reject;
     reader.readAsDataURL(file);
+  });
+}
+
+/**
+ * Resize + compress image to max 1024px wide/tall at JPEG 0.82 quality.
+ * Mobile photos are often 5–10 MB; base64 encoding them exceeds API request
+ * size limits and causes 400 errors. This keeps the payload well under 400 KB.
+ */
+function resizeImage(file: File): Promise<File> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+
+      const MAX = 1024;
+      let { width, height } = img;
+      if (width > MAX || height > MAX) {
+        if (width >= height) {
+          height = Math.round((height * MAX) / width);
+          width = MAX;
+        } else {
+          width = Math.round((width * MAX) / height);
+          height = MAX;
+        }
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        resolve(file); // fallback: send original
+        return;
+      }
+      ctx.drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) { resolve(file); return; }
+          resolve(new File([blob], "meal.jpg", { type: "image/jpeg" }));
+        },
+        "image/jpeg",
+        0.82
+      );
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      resolve(file); // fallback: send original
+    };
+
+    img.src = url;
   });
 }
 
@@ -85,10 +139,13 @@ export async function analyzeImageApi(
   }
 
   try {
-    // Step 1: Convert image to base64 data-URL
-    const base64 = await fileToBase64(file);
+    // Step 1: Compress/resize image to avoid API request-too-large (400) errors
+    const compressed = await resizeImage(file);
 
-    // Step 2: Call OpenRouter
+    // Step 2: Convert image to base64 data-URL
+    const base64 = await fileToBase64(compressed);
+
+    // Step 3: Call OpenRouter
     const res = await fetch(OPENROUTER_URL, {
       method: "POST",
       headers: {

@@ -67,8 +67,6 @@ const Analyze = () => {
   const [mode, setMode] = useState<AnalyzeSource | "barcode">(() =>
     searchParams.get("mode") === "camera" ? "image" : "text"
   );
-  // autoStart camera if opened via camera icon (only on first render)
-  const autoStartCamera = searchParams.get("mode") === "camera";
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [decision, setDecision] = useState<MealDecision | null>(null);
 
@@ -479,7 +477,6 @@ const Analyze = () => {
               <CameraCapture
                 onCapture={handleFileSelect}
                 disabled={imageStatus === "uploading" || imageStatus === "hashing" || imageStatus === "analyzing"}
-                autoStart={autoStartCamera}
               />
 
               {/* Analyze button */}
